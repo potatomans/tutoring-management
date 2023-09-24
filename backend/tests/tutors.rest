@@ -1,0 +1,11 @@
+GET http://localhost:3001/api/tutors
+
+###
+POST http://localhost:3001/api/tutors
+Content-Type: application/json
+
+{
+    "name": "Lim Shuai Ge",
+    "number": "9000 9999",
+    "endDate": "2023-12-31"
+}

@@ -1,0 +1,10 @@
+GET http://localhost:3001/api/tutees
+
+###
+POST http://localhost:3001/api/tutees
+Content-Type: application/json
+
+{
+    "name": "Tan Ah Lian",
+    "number": "9000 9000"
+}
