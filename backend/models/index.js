@@ -12,6 +12,12 @@ User.hasMany(Pairing)
 Tutee.belongsToMany(Tutor, { through: Pairing })
 Tutor.belongsToMany(Tutee, { through: Pairing })
 
+Pairing.belongsTo(Tutee)
+Tutee.hasMany(Pairing)
+
+Pairing.belongsTo(Tutor)
+Tutor.hasMany(Pairing)
+
 Pairing.belongsToMany(Subject, { through: SubjectPairing })
 Subject.belongsToMany(Pairing, { through: SubjectPairing })
 

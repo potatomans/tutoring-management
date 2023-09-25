@@ -1,5 +1,7 @@
 const express = require('express')
+require('express-async-errors')
 const app = express()
+const cors = require('cors')
 
 const { PORT } = require('./util/config')
 const { connectToDatabase } = require('./util/db')
@@ -11,6 +13,7 @@ const pairingsRouter = require('./controllers/pairings')
 const sessionsRouter = require('./controllers/sessions')
 
 app.use(express.json())
+app.use(cors())
 
 app.use('/api/users', usersRouter)
 app.use('/api/tutees', tuteesRouter)
