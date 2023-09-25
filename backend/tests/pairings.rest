@@ -1,0 +1,16 @@
+GET http://localhost:3001/api/pairings
+
+
+###
+POST http://localhost:3001/api/pairings
+Content-Type: application/json
+
+{
+    "tuteeId": 1,
+    "tutorId": 2,
+    "userId": 1,
+    "level": "Sec 3 Bio",
+    "strengths": "Ah Lian is an enthusiastic girl.",
+    "weaknesses": "Ah Lian is sometimes distracted during lessons.",
+    "goals": "I hope that Ah Lian can get 100% for her Bio test next week."
+}

@@ -1,0 +1,15 @@
+GET http://localhost:3001/api/sessions
+
+
+###
+POST http://localhost:3001/api/sessions
+Content-Type: application/json
+
+{
+    "pairingId": "5",
+    "date": "2023-09-26",
+    "hours": 1.5,
+    "overview": "It was a great session. Ah Lian learnt many new Bio concepts, including evolution.",
+    "problems": "Ah Lian was late for 10 minutes.",
+    "nextSession": "I will be covering natural selection with Ah Lian during the next lesson."
+}
