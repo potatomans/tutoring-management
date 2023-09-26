@@ -13,11 +13,10 @@ import UserInfoPage from './pages/UserInfoPage';
 export default function Router() {
   const routes = useRoutes([
     {
-      path: '/login',
+      path: '/update',
       element: <TutorUpdatePage />,
       children: [
-        { element: <Navigate to="dashboard/app" />, index: true },
-        { path: 'app', element: <TutorUpdatePage /> }
+        { element: <Navigate to="dashboard/app" />, index: true }
       ],
     },
     {
@@ -33,7 +32,7 @@ export default function Router() {
       ],
     },
     {
-      element: <SimpleLayout />,
+      element: <SimpleLayout />, // this is the layout before DashboardLayout loads
       children: [
         { element: <Navigate to="/dashboard/app" />, index: true },
         { path: '404', element: <Page404 /> },

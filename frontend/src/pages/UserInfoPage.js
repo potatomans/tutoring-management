@@ -110,7 +110,7 @@ export default function TutorUpdatePage() {
                 
 
             <Helmet>
-                <title> Update tutor </title>
+                <title> {users[0].name} Records </title>
             </Helmet>
 
 

@@ -3,7 +3,11 @@ const router = require('express').Router()
 const { Tutee, Tutor } = require('../models')
 
 router.get('/', async (req, res) => {
-    const tutees = await Tutee.findAll()
+    const tutees = await Tutee.findAll({
+        include: {
+            model: Tutor
+        }
+    })
     res.json(tutees)
 })
 

@@ -39,7 +39,7 @@ Pairing.init({
     },
     active: {
         type: DataTypes.BOOLEAN,
-        default: true
+        defaultValue: true
     }
 }, {
     sequelize,

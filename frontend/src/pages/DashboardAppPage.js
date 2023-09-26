@@ -1,8 +1,9 @@
 import { Helmet } from 'react-helmet-async';
 import { filter } from 'lodash';
 import { sentenceCase } from 'change-case';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+
 // @mui
 import {
   Box,
@@ -27,6 +28,11 @@ import {
   TablePagination,
 } from '@mui/material';
 
+// services
+import { getAllUsers } from '../services/userService';
+import { getAllPairings } from '../services/pairingService';
+import { getAllTutees } from '../services/tuteeService';
+
 // components
 import Label from '../components/label';
 import Iconify from '../components/iconify';
@@ -38,6 +44,8 @@ import { UserListHead, UserListToolbar } from '../sections/@dashboard/user';
 
 // mock
 import USERLIST from '../_mock/user';
+import account from '../_mock/account'
+
 
 // ----------------------------------------------------------------------
 
@@ -98,8 +106,19 @@ export default function DashboardAppPage() {
 
   const [modalOpen, setModalOpen] = useState(false)
 
+  const [users, setUsers] = useState([])
+
+  const [pairings, setPairings] = useState([])
+
+  const [tutees, setTutees] = useState([])
+
   const navigate = useNavigate()
 
+  useEffect(() => {
+    getAllUsers().then(data => setUsers(data))
+    getAllPairings().then(data => setPairings(data))
+    getAllTutees().then(data => setTutees(data))
+  }, [])
 
   const handleViewMore = (id) => {
     navigate(`/dashboard/user/${id}`)
@@ -121,7 +140,7 @@ export default function DashboardAppPage() {
 
   const handleSelectAllClick = (event) => {
     if (event.target.checked) {
-      const newSelecteds = USERLIST.map((n) => n.name);
+      const newSelecteds = tutees.map((n) => n.name);
       setSelected(newSelecteds);
       return;
     }
@@ -131,9 +150,9 @@ export default function DashboardAppPage() {
   const handleClick = (event, name) => {
     const selectedIndex = selected.indexOf(name);
     let newSelected = [];
-    if (selectedIndex === -1) {
+    if (selectedIndex === -1) { // if el is not selected
       newSelected = newSelected.concat(selected, name);
-    } else if (selectedIndex === 0) {
+    } else if (selectedIndex === 0) { // if first el is selected
       newSelected = newSelected.concat(selected.slice(1));
     } else if (selectedIndex === selected.length - 1) {
       newSelected = newSelected.concat(selected.slice(0, -1));
@@ -159,14 +178,13 @@ export default function DashboardAppPage() {
 
   const handleNewUser = () => {
     setModalOpen(true)
-
   }
 
   const handleCloseModal = () => setModalOpen(false)
 
-  const emptyRows = page > 0 ? Math.max(0, (1 + page) * rowsPerPage - USERLIST.length) : 0;
+  const emptyRows = page > 0 ? Math.max(0, (1 + page) * rowsPerPage - tutees.length) : 0;
 
-  const filteredUsers = applySortFilter(USERLIST, getComparator(order, orderBy), filterName);
+  const filteredUsers = applySortFilter(tutees, getComparator(order, orderBy), filterName);
 
   const isNotFound = !filteredUsers.length && !!filterName;
 
@@ -198,10 +216,10 @@ export default function DashboardAppPage() {
           <Typography id="modal-modal-description" sx={{ mt: 2 }}>
             <form>
               <div>
-              <TextField name="tutee" label="Tutee name" />
-              <TextField name="tutor" label="Tutor name" />
-              <TextField name="level" label="Level and subject" />
-              <TextField name="organisation" label="Partner organisation" />
+                <TextField name="tutee" label="Tutee name" />
+                <TextField name="tutor" label="Tutor name" />
+                <TextField name="level" label="Level and subject" />
+                <TextField name="organisation" label="Partner organisation" />
               </div>
               <Button type='submit' variant='contained'>Create new</Button>
             </form>
@@ -217,7 +235,7 @@ export default function DashboardAppPage() {
       <Container maxWidth="xl">
         <Stack direction="row" alignItems="center" justifyContent="space-between" mb={5}>
           <Typography variant="h4" sx={{ mb: 5 }}>
-            Hi, Welcome back
+            Hi {account.displayName}, Welcome back
           </Typography>
           <Button variant="contained" startIcon={<Iconify icon="eva:plus-fill" />} onClick={handleNewUser}>
             New Tutee
@@ -234,15 +252,19 @@ export default function DashboardAppPage() {
                   order={order}
                   orderBy={orderBy}
                   headLabel={TABLE_HEAD}
-                  rowCount={USERLIST.length}
+                  rowCount={tutees.length}
                   numSelected={selected.length}
                   onRequestSort={handleRequestSort}
                   onSelectAllClick={handleSelectAllClick}
                 />
                 <TableBody>
                   {filteredUsers.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((row) => {
-                    const { id, name, noOfSessions, tutor, levelSubject, organisation, avatarUrl } = row;
+                    const { id, name, tutors, number } = row;
+                    const { pairing, endDate } = tutors[0]
+                    const { level } = pairing
                     const selectedUser = selected.indexOf(name) !== -1;
+
+                    console.log(name, tutors[0], level, number, endDate)
 
                     return (
                       <TableRow hover key={id} tabIndex={-1} role="checkbox" selected={selectedUser}>
@@ -252,20 +274,20 @@ export default function DashboardAppPage() {
 
                         <TableCell component="th" scope="row" padding="none">
                           <Stack direction="row" alignItems="center" spacing={2}>
-                            <Avatar alt={name} src={avatarUrl} />
+                            <Avatar alt={name} src='/assets/images/avatars/avatar_10.jpg' />
                             <Typography variant="subtitle2" noWrap>
                               {name}
                             </Typography>
                           </Stack>
                         </TableCell>
 
-                        <TableCell align="left">{tutor}</TableCell>
+                        <TableCell align="left">{tutors[0].name}</TableCell>
 
-                        <TableCell align="left">{levelSubject}</TableCell>
+                        <TableCell align="left">{level}</TableCell>
 
-                        <TableCell align="left">{organisation}</TableCell>
+                        <TableCell align="left">{number}</TableCell>
 
-                        <TableCell align="left">{noOfSessions}</TableCell>
+                        <TableCell align="left">{endDate}</TableCell>
 
                         <TableCell align="right">
                           <Button variant="outlined" onClick={() => handleViewMore(id)}>More</Button>
@@ -313,7 +335,7 @@ export default function DashboardAppPage() {
           <TablePagination
             rowsPerPageOptions={[5, 10, 25]}
             component="div"
-            count={USERLIST.length}
+            count={tutees.length}
             rowsPerPage={rowsPerPage}
             page={page}
             onPageChange={handleChangePage}
