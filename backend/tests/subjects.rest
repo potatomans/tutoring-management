@@ -1,0 +1,11 @@
+GET http://localhost:3001/api/subjects
+
+###
+POST http://localhost:3001/api/subjects
+Content-Type: application/json
+
+{
+    "symbol": "MATH",
+    "name": "Mathematics",
+    "level": "Primary 6"
+}

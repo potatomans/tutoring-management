@@ -3,7 +3,28 @@ const router = require('express').Router()
 const { Pairing, Session, User, Subject, Tutee, Tutor } = require('../models')
 
 router.get('/', async (req, res) => {
-    const pairings = await Pairing.findAll()
+    const pairings = await Pairing.findAll({
+        include: [
+            {
+                model: User
+            },
+            {
+                model: Session
+            },
+            {
+                model: Subject,
+                through: {
+                    attributes: []
+                }
+            },
+            {
+                model: Tutee
+            },
+            {
+                model: Tutor
+            }
+        ]
+    })
     res.json(pairings)
 })
 
@@ -17,7 +38,10 @@ router.get('/:id', async (req, res) => {
                 model: Session
             },
             {
-                model: Subject
+                model: Subject,
+                through: {
+                    attributes: []
+                }
             },
             {
                 model: Tutee

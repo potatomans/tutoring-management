@@ -40,6 +40,9 @@ Pairing.init({
     active: {
         type: DataTypes.BOOLEAN,
         defaultValue: true
+    },
+    location: {
+        type: DataTypes.TEXT
     }
 }, {
     sequelize,

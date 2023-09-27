@@ -6,10 +6,10 @@ POST http://localhost:3001/api/sessions
 Content-Type: application/json
 
 {
-    "pairingId": "5",
-    "date": "2023-09-26",
-    "hours": 1.5,
-    "overview": "It was a great session. Ah Lian learnt many new Bio concepts, including evolution.",
-    "problems": "Ah Lian was late for 10 minutes.",
-    "nextSession": "I will be covering natural selection with Ah Lian during the next lesson."
+    "pairingId": "6",
+    "date": "2023-09-27",
+    "hours": 2,
+    "overview": "Meng Peh's PSLE Math paper is just 2 days away. He has worked very hard for it and I am sure he will do well.",
+    "problems": "None.",
+    "nextSession": "This is my last lesson with him. I wish him all the best for his paper!"
 }

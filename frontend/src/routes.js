@@ -26,7 +26,7 @@ export default function Router() {
         { element: <Navigate to="/dashboard/app" />, index: true },
         { path: 'app', element: <DashboardAppPage /> },
         {
-          path: 'user/:id', // /dashboard/user/:id
+          path: 'tutee/:id', // /dashboard/user/:id
           element: <UserInfoPage />
         },
       ],

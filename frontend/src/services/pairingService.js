@@ -7,7 +7,7 @@ export const getAllPairings = async () => {
     return res.data
 }
 
-export const getPairing = async () => {
-    const res = await axios.get(baseUrl)
+export const getPairing = async (id) => {
+    const res = await axios.get(`${baseUrl}/${id}`)
     return res.data
 }

@@ -1,0 +1,15 @@
+const router = require('express').Router()
+
+const { Subject } = require('../models')
+
+router.get('/', async (req, res) => {
+    const subjects = await Subject.findAll()
+    res.json(subjects)
+})
+
+router.post('/', async (req, res) => {
+    const subject = await Subject.create(req.body)
+    res.json(subject)
+})
+
+module.exports = router

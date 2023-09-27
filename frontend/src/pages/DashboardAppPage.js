@@ -53,8 +53,8 @@ const TABLE_HEAD = [
   { id: 'tutee', label: 'Tutee', alignRight: false },
   { id: 'tutor', label: 'Tutor', alignRight: false },
   { id: 'level', label: 'Level', alignRight: false },
-  { id: 'organisation', label: 'Organisation', alignRight: false },
-  { id: 'sessionNo', label: 'Number Of Sessions', alignRight: false },
+  { id: 'endDate', label: 'Tutor End Date', alignRight: false },
+  { id: 'lastSession', label: 'Days since Last Session', alignRight: false },
   { id: '' },
 ];
 
@@ -110,18 +110,32 @@ export default function DashboardAppPage() {
 
   const [pairings, setPairings] = useState([])
 
+  const [dashboard, setDashboard] = useState([])
+
   const [tutees, setTutees] = useState([])
 
   const navigate = useNavigate()
 
   useEffect(() => {
     getAllUsers().then(data => setUsers(data))
-    getAllPairings().then(data => setPairings(data))
+    getAllPairings().then(data => { 
+      setPairings(data)
+      const dashboard = data.map(pairing => {
+        const id = pairing.id
+        const tutee = pairing.tutee.name
+        const tutor = pairing.tutor.name
+        const subject = pairing.level == null ? pairing.subjects[0].level.concat(' ', pairing.subjects[0].symbol) : pairing.level
+        const endDate = new Date(pairing.tutor.endDate).toDateString()
+        const lastSession = Math.floor((new Date().getTime() - new Date(pairing.sessions[pairing.sessions.length - 1].date).getTime()) / (1000 * 60 * 60 * 24))
+        return { id, tutee, tutor, subject, endDate, lastSession }
+      })
+      setDashboard(dashboard)
+  })
     getAllTutees().then(data => setTutees(data))
   }, [])
 
   const handleViewMore = (id) => {
-    navigate(`/dashboard/user/${id}`)
+    navigate(`/dashboard/tutee/${id}`)
   }
 
   const handleOpenMenu = (event) => {
@@ -184,7 +198,7 @@ export default function DashboardAppPage() {
 
   const emptyRows = page > 0 ? Math.max(0, (1 + page) * rowsPerPage - tutees.length) : 0;
 
-  const filteredUsers = applySortFilter(tutees, getComparator(order, orderBy), filterName);
+  const filteredUsers = applySortFilter(dashboard, getComparator(order, orderBy), filterName);
 
   const isNotFound = !filteredUsers.length && !!filterName;
 
@@ -259,35 +273,31 @@ export default function DashboardAppPage() {
                 />
                 <TableBody>
                   {filteredUsers.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((row) => {
-                    const { id, name, tutors, number } = row;
-                    const { pairing, endDate } = tutors[0]
-                    const { level } = pairing
-                    const selectedUser = selected.indexOf(name) !== -1;
-
-                    console.log(name, tutors[0], level, number, endDate)
+                    const { id, tutee, tutor, subject, endDate, lastSession } = row
+                    const selectedUser = selected.indexOf(tutee) !== -1;
 
                     return (
                       <TableRow hover key={id} tabIndex={-1} role="checkbox" selected={selectedUser}>
                         <TableCell padding="checkbox">
-                          <Checkbox checked={selectedUser} onChange={(event) => handleClick(event, name)} />
+                          <Checkbox checked={selectedUser} onChange={(event) => handleClick(event, tutee)} />
                         </TableCell>
 
                         <TableCell component="th" scope="row" padding="none">
                           <Stack direction="row" alignItems="center" spacing={2}>
-                            <Avatar alt={name} src='/assets/images/avatars/avatar_10.jpg' />
+                            <Avatar alt={tutee} src='/assets/images/avatars/avatar_10.jpg' />
                             <Typography variant="subtitle2" noWrap>
-                              {name}
+                              {tutee}
                             </Typography>
                           </Stack>
                         </TableCell>
 
-                        <TableCell align="left">{tutors[0].name}</TableCell>
+                        <TableCell align="left">{tutor}</TableCell>
 
-                        <TableCell align="left">{level}</TableCell>
-
-                        <TableCell align="left">{number}</TableCell>
+                        <TableCell align="left">{subject}</TableCell>
 
                         <TableCell align="left">{endDate}</TableCell>
+
+                        <TableCell align="left">{lastSession}</TableCell>
 
                         <TableCell align="right">
                           <Button variant="outlined" onClick={() => handleViewMore(id)}>More</Button>

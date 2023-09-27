@@ -10,6 +10,11 @@ const navConfig = [
     title: 'dashboard',
     path: '/dashboard/app',
     icon: icon('ic_analytics')
+  },
+  {
+    title: 'tutor update form',
+    path: '/update',
+    icon: icon('ic_analytics')
   }
 ];
 
