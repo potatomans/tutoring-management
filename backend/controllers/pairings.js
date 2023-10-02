@@ -1,6 +1,7 @@
 const router = require('express').Router()
 
 const { Pairing, Session, User, Subject, Tutee, Tutor } = require('../models')
+const { Op } = require('sequelize')
 
 router.get('/', async (req, res) => {
     const pairings = await Pairing.findAll({
@@ -18,10 +19,16 @@ router.get('/', async (req, res) => {
                 }
             },
             {
-                model: Tutee
+                model: Tutee,
+                where: {
+                    name: req.query.tutee ? {[Op.iLike]: '%' + req.query.tutee + '%'} : {[Op.substring]: ''}
+                }
             },
             {
-                model: Tutor
+                model: Tutor,
+                where: {
+                    name: req.query.tutor ? {[Op.iLike]: '%' + req.query.tutor + '%'} : {[Op.substring]: ''}
+                }
             }
         ]
     })
@@ -56,7 +63,7 @@ router.get('/:id', async (req, res) => {
 
 router.post('/', async (req, res) => {
     const pairing = await Pairing.create(req.body)
-    res.json(pairing)
+    res.status(201).json(pairing)
 })
 
 module.exports = router

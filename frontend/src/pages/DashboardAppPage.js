@@ -124,9 +124,9 @@ export default function DashboardAppPage() {
         const id = pairing.id
         const tutee = pairing.tutee.name
         const tutor = pairing.tutor.name
-        const subject = pairing.level == null ? pairing.subjects[0].level.concat(' ', pairing.subjects[0].symbol) : pairing.level
+        const subject = pairing.level == null ? pairing.subjects[0].level.concat(' ', pairing.subjects[0].symbol) : pairing.level 
         const endDate = new Date(pairing.tutor.endDate).toDateString()
-        const lastSession = Math.floor((new Date().getTime() - new Date(pairing.sessions[pairing.sessions.length - 1].date).getTime()) / (1000 * 60 * 60 * 24))
+        const lastSession = Math.floor((new Date().getTime() - new Date(pairing.sessions[0].date).getTime()) / (1000 * 60 * 60 * 24))
         return { id, tutee, tutor, subject, endDate, lastSession }
       })
       setDashboard(dashboard)

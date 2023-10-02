@@ -9,7 +9,7 @@ router.get('/', async (req, res) => {
 
 router.post('/', async (req, res) => {
     const subject = await Subject.create(req.body)
-    res.json(subject)
+    res.status(201).json(subject)
 })
 
 module.exports = router

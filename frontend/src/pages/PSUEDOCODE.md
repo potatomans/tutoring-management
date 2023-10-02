@@ -22,3 +22,12 @@ pairings.map(pairing => {
     const lastSession = new Date().getTime() - pairing.sessions[pairing.sessions.length - 1].date.getTime() // in ms?
     return { tutee, tutor, subject, endDate, lastSession }
 })
+
+first session form inputs: 
+- volunteer manager name
+- strengths of tutee
+- weaknesses of tutee
+- goals for tutee
+
+
+NOTE: when finding tutor/tutee ids based on the name submitted, do a loop thru all the possible names. in case substrings generate multiple names and/or two people have the same name. then the program should check if the tutor/tutee is part of that pairing, since pairings must be unique

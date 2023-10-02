@@ -9,7 +9,7 @@ router.get('/', async (req, res) => {
 
 router.post('/', async (req, res) => {
     const session = await Session.create(req.body)
-    res.json(session)
+    res.status(201).json(session)
 })
 
 module.exports = router
