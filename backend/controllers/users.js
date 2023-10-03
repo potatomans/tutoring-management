@@ -1,3 +1,4 @@
+const bcrypt = require('bcrypt')
 const router = require('express').Router()
 
 const { User, Pairing } = require('../models')
@@ -21,8 +22,26 @@ router.get('/:id', async (req, res) => {
 })
 
 router.post('/', async (req, res) => {
-    const user = await User.create(req.body)
+    const { username, name, password, email, organisation } = req.body
+    
+    const saltRounds = 10
+    const passwordHash = await bcrypt.hash(password, saltRounds)
+
+    const user = await User.create({ username, name, password: passwordHash, email, organisation })
     res.status(201).json(user)
+})
+
+router.put('/:id', async (req, res) => {
+    const user = await User.findByPk(req.params.id)
+    if (user) {
+        const saltRounds = 10
+        const passwordHash = await bcrypt.hash(req.body.password, saltRounds)
+        user.password = passwordHash
+        await user.save()
+        res.json(user)
+    } else {
+        res.status(404).end()
+    }
 })
 
 module.exports = router

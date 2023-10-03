@@ -1,8 +1,8 @@
 import { Helmet } from 'react-helmet-async';
 import { filter } from 'lodash';
 import { sentenceCase } from 'change-case';
-import { useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useEffect, useState, useContext } from 'react';
+import { Navigate, useNavigate } from 'react-router-dom';
 
 // @mui
 import {
@@ -37,6 +37,7 @@ import { getAllTutees } from '../services/tuteeService';
 import Label from '../components/label';
 import Iconify from '../components/iconify';
 import Scrollbar from '../components/scrollbar';
+import UserContext from '../UserContext'
 
 // sections
 import { UserListHead, UserListToolbar } from '../sections/@dashboard/user';
@@ -114,11 +115,16 @@ export default function DashboardAppPage() {
 
   const [tutees, setTutees] = useState([])
 
+  const [user, setUser] = useContext(UserContext)
+
   const navigate = useNavigate()
 
   useEffect(() => {
-    getAllUsers().then(data => setUsers(data))
-    getAllPairings().then(data => { 
+    if (!user) {
+      navigate('/login')
+    }
+    console.log(Number(user.id))
+    getAllPairings(user.id).then(data => { 
       setPairings(data)
       const dashboard = data.map(pairing => {
         const id = pairing.id
@@ -133,6 +139,10 @@ export default function DashboardAppPage() {
   })
     getAllTutees().then(data => setTutees(data))
   }, [])
+
+
+
+  console.log('user', user)
 
   const handleViewMore = (id) => {
     navigate(`/dashboard/tutee/${id}`)

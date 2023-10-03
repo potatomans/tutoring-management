@@ -13,6 +13,7 @@ const pairingsRouter = require('./controllers/pairings')
 const sessionsRouter = require('./controllers/sessions')
 const subjectsRouter = require('./controllers/subjects')
 const subjectPairingsRouter = require('./controllers/subjectpairings')
+const loginRouter = require('./controllers/login')
 
 app.use(express.json())
 app.use(cors())
@@ -24,6 +25,7 @@ app.use('/api/pairings', pairingsRouter)
 app.use('/api/sessions', sessionsRouter)
 app.use('/api/subjects', subjectsRouter)
 app.use('/api/subjectpairings', subjectPairingsRouter)
+app.use('/api/login', loginRouter)
 
 const start = async () => {
   await connectToDatabase()

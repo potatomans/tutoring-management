@@ -35,7 +35,36 @@ router.get('/', async (req, res) => {
     res.json(pairings)
 })
 
-router.get('/:id', async (req, res) => {
+router.get('/:userId', async (req, res) => {
+    const pairings = await Pairing.findAll({
+        include: [
+            {
+                model: User
+            },
+            {
+                model: Session
+            },
+            {
+                model: Subject,
+                through: {
+                    attributes: []
+                }
+            },
+            {
+                model: Tutee
+            },
+            {
+                model: Tutor
+            }
+        ],
+        where: {
+            userId: req.params.userId
+        }
+    })
+    res.json(pairings)
+})
+
+router.get('/user/:id', async (req, res) => {
     const pairing = await Pairing.findByPk(req.params.id, {
         include: [
             {

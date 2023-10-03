@@ -21,7 +21,8 @@ User.init({
         allowNull: false
     },
     name: {
-        type: DataTypes.TEXT
+        type: DataTypes.TEXT,
+        allowNull: false
     },
     password: {
         type: DataTypes.TEXT,

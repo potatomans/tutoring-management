@@ -7,6 +7,7 @@ import Page404 from './pages/Page404';
 import DashboardAppPage from './pages/DashboardAppPage';
 import TutorUpdatePage from './pages/TutorUpdatePage';
 import UserInfoPage from './pages/UserInfoPage';
+import LoginPage from './pages/LoginPage';
 
 // ----------------------------------------------------------------------
 
@@ -18,6 +19,13 @@ export default function Router() {
       children: [
         { element: <Navigate to="dashboard/app" />, index: true }
       ],
+    },
+    {
+      path: '/login',
+      element: <LoginPage />,
+      children: [
+        { element: <Navigate to="dashboard/app" />, index: true }
+      ]
     },
     {
       path: '/dashboard',

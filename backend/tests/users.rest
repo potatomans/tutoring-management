@@ -5,6 +5,17 @@ POST http://localhost:3001/api/users
 Content-Type: application/json
 
 {
-    "username": "John Doe",
+    "username": "Test User",
+    "name": "mrtester",
+    "password": "testuser",
+    "email": "testuser@gmail.com",
+    "organisation": "testorg"
+}
+
+###
+PUT http://localhost:3001/api/users/1
+Content-Type: application/json
+
+{
     "password": "eduhopesg"
 }

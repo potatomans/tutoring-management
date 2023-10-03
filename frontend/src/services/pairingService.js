@@ -2,13 +2,14 @@ import axios from 'axios'
 
 const baseUrl = 'http://localhost:3001/api/pairings'
 
-export const getAllPairings = async () => {
-    const res = await axios.get(baseUrl)
+export const getAllPairings = async (userId) => {
+    console.log('inner userId', userId)
+    const res = await axios.get(`${baseUrl}/${userId}`)
     return res.data
 }
 
 export const getPairing = async (id) => {
-    const res = await axios.get(`${baseUrl}/${id}`)
+    const res = await axios.get(`${baseUrl}/user/${id}`)
     return res.data
 }
 

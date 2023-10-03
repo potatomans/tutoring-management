@@ -45,7 +45,7 @@ const SessionRecords = ({ sessions }) => {
     )
 }
 
-export default function TutorUpdatePage() { 
+export default function UserInfoPage() { 
     const { pathname } = useLocation()
     const pathArr = pathname.split('/')
     const id = pathArr[pathArr.length - 1]
