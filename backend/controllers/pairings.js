@@ -2,8 +2,9 @@ const router = require('express').Router()
 
 const { Pairing, Session, User, Subject, Tutee, Tutor } = require('../models')
 const { Op } = require('sequelize')
+const tokenExtractor = require('../authMiddleware')
 
-router.get('/', async (req, res) => {
+router.get('/', tokenExtractor, async (req, res) => {
     const pairings = await Pairing.findAll({
         include: [
             {
@@ -35,7 +36,10 @@ router.get('/', async (req, res) => {
     res.json(pairings)
 })
 
-router.get('/:userId', async (req, res) => {
+router.get('/:userId', tokenExtractor, async (req, res) => {
+    if (req.decodedToken.id !== Number(req.params.userId)) {
+        throw new Error('Forbidden: You do not have access to this information.')
+    }
     const pairings = await Pairing.findAll({
         include: [
             {
@@ -64,7 +68,7 @@ router.get('/:userId', async (req, res) => {
     res.json(pairings)
 })
 
-router.get('/user/:id', async (req, res) => {
+router.get('/user/:id', tokenExtractor, async (req, res) => {
     const pairing = await Pairing.findByPk(req.params.id, {
         include: [
             {

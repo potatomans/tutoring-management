@@ -3,8 +3,9 @@ const router = require('express').Router()
 const { Tutee, Tutor } = require('../models')
 const { Op } = require('sequelize')
 const { sequelize } = require('../util/db')
+const tokenExtractor = require('../authMiddleware')
 
-router.get('/', async (req, res) => {
+router.get('/', tokenExtractor, async (req, res) => {
     const tutees = await Tutee.findAll({
         include: {
             model: Tutor
@@ -16,7 +17,7 @@ router.get('/', async (req, res) => {
     res.json(tutees)
 })
 
-router.get('/:id', async (req, res) => {
+router.get('/:id', tokenExtractor, async (req, res) => {
     const tutee = await Tutee.findByPk(req.params.id, {
         include: {
             model: Tutor

@@ -1,8 +1,9 @@
 const router = require('express').Router()
 
 const { Subject } = require('../models')
+const tokenExtractor = require('../authMiddleware')
 
-router.get('/', async (req, res) => {
+router.get('/', tokenExtractor, async (req, res) => {
     const subjects = await Subject.findAll()
     res.json(subjects)
 })

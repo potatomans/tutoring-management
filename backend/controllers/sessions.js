@@ -1,8 +1,9 @@
 const router = require('express').Router()
 
 const { Session } = require('../models')
+const tokenExtractor = require('../authMiddleware')
 
-router.get('/', async (req, res) => {
+router.get('/', tokenExtractor, async (req, res) => {
     const sessions = await Session.findAll()
     res.json(sessions)
 })

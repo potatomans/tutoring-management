@@ -8,6 +8,11 @@ import Iconify from '../../../components/iconify';
 import UserContext from '../../../UserContext';
 // services
 import { login } from '../../../services/loginService'
+import { setPairingToken } from '../../../services/pairingService';
+import { setSessionToken } from '../../../services/sessionService';
+import { setTutorToken } from '../../../services/tutorService';
+import { setTuteeToken } from '../../../services/tuteeService';
+import { setUserToken } from '../../../services/userService';
 
 // ----------------------------------------------------------------------
 
@@ -26,6 +31,11 @@ export default function LoginForm() {
     // post it to /api/login, then render accordingly.
     try {
         const user = await login({ username, password })
+        setPairingToken(user.token)
+        setSessionToken(user.token)
+        setTutorToken(user.token)
+        setTuteeToken(user.token)
+        setUserToken(user.token)
         setUser(user)
         setUsername('')
         setPassword('')

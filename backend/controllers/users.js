@@ -3,8 +3,9 @@ const router = require('express').Router()
 
 const { User, Pairing } = require('../models')
 const { Op } = require('sequelize')
+const tokenExtractor = require('../authMiddleware')
 
-router.get('/', async (req, res) => {
+router.get('/', tokenExtractor, async (req, res) => {
     const users = await User.findAll({
         where: {
             username: req.query.username ? {[Op.iLike]: '%' + req.query.username + '%'} : {[Op.substring]: ''}
@@ -12,7 +13,7 @@ router.get('/', async (req, res) => {
     res.json(users)
 })
 
-router.get('/:id', async (req, res) => {
+router.get('/:id', tokenExtractor, async (req, res) => {
     const user = await User.findByPk(req.params.id, {
         include: {
             model: Pairing

@@ -29,7 +29,6 @@ import {
 } from '@mui/material';
 
 // services
-import { getAllUsers } from '../services/userService';
 import { getAllPairings } from '../services/pairingService';
 import { getAllTutees } from '../services/tuteeService';
 
@@ -124,7 +123,7 @@ export default function DashboardAppPage() {
       navigate('/login')
     }
     console.log(Number(user.id))
-    getAllPairings(user.id).then(data => { 
+    getAllPairings(user.id, user.token).then(data => { 
       setPairings(data)
       const dashboard = data.map(pairing => {
         const id = pairing.id

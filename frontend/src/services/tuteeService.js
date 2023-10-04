@@ -2,13 +2,25 @@ import axios from 'axios'
 
 const baseUrl = 'http://localhost:3001/api/tutees'
 
+let token = null
+
+export const setTuteeToken = newToken => {
+  token = `Bearer ${newToken}`
+}
+
 export const getAllTutees = async () => {
-    const res = await axios.get(baseUrl)
+    const config = {
+        headers: { Authorization: token },
+    }
+    const res = await axios.get(baseUrl, config)
     return res.data
 }
 
 export const getTuteeId = async (name) => {
-    const res = await axios.get(`${baseUrl}?name=${name}`)
+    const config = {
+        headers: { Authorization: token },
+    }
+    const res = await axios.get(`${baseUrl}?name=${name}`, config)
     return Number(res.data[0].id)
 }
 

@@ -2,8 +2,17 @@ import axios from 'axios'
 
 const baseUrl = 'http://localhost:3001/api/sessions'
 
+let token = null
+
+export const setSessionToken = newToken => {
+  token = `Bearer ${newToken}`
+}
+
 export const getAllSession = async () => {
-    const res = await axios.get(baseUrl)
+    const config = {
+        headers: { Authorization: token },
+    }
+    const res = await axios.get(baseUrl, config)
     return res.data
 }
 

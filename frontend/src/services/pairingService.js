@@ -2,14 +2,25 @@ import axios from 'axios'
 
 const baseUrl = 'http://localhost:3001/api/pairings'
 
+let token = null
+
+export const setPairingToken = newToken => {
+  token = `Bearer ${newToken}`
+}
+
 export const getAllPairings = async (userId) => {
-    console.log('inner userId', userId)
-    const res = await axios.get(`${baseUrl}/${userId}`)
+    const config = {
+        headers: { Authorization: token },
+    }
+    const res = await axios.get(`${baseUrl}/${userId}`, config)
     return res.data
 }
 
 export const getPairing = async (id) => {
-    const res = await axios.get(`${baseUrl}/user/${id}`)
+    const config = {
+        headers: { Authorization: token },
+    }
+    const res = await axios.get(`${baseUrl}/user/${id}`, config)
     return res.data
 }
 
