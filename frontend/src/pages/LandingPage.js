@@ -1,7 +1,5 @@
 import { Container, Stack, TextField, Typography } from '@mui/material';
 import { styled } from '@mui/material/styles';
-import { LoadingButton } from '@mui/lab';
-import { useState } from 'react';
 import EmailListForm from '../sections/@landingpage/EmailListForm'
 
 export default function LandingPage() {

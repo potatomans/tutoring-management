@@ -29,7 +29,7 @@ import {
 } from '@mui/material';
 
 // services
-import { getAllPairings, setPairingToken } from '../services/pairingService';
+import { getAllPairings, getMasterPairings, setPairingToken } from '../services/pairingService';
 import { getAllTutees, setTuteeToken } from '../services/tuteeService';
 import { setSessionToken } from '../services/sessionService';
 import { setTutorToken } from '../services/tutorService';
@@ -108,9 +108,7 @@ export default function DashboardAppPage() {
   const [rowsPerPage, setRowsPerPage] = useState(5);
 
   const [modalOpen, setModalOpen] = useState(false)
-
-  const [users, setUsers] = useState([])
-
+  
   const [pairings, setPairings] = useState([])
 
   const [dashboard, setDashboard] = useState([])
@@ -140,19 +138,35 @@ export default function DashboardAppPage() {
   }, [])
 
   const initDashboard = (user) => {
-    getAllPairings(user.id, user.token).then(data => { 
-      setPairings(data)
-      const dashboard = data.map(pairing => {
-        const {id} = pairing
-        const tutee = pairing.tutee.name
-        const tutor = pairing.tutor.name
-        const subject = pairing.level == null ? pairing.subjects[0].level.concat(' ', pairing.subjects[0].symbol) : pairing.level 
-        const endDate = new Date(pairing.tutor.endDate).toDateString()
-        const lastSession = Math.floor((new Date().getTime() - new Date(pairing.sessions[0].date).getTime()) / (1000 * 60 * 60 * 24))
-        return { id, tutee, tutor, subject, endDate, lastSession }
+    if (user.username === 'EduHopeSG') {
+      getMasterPairings().then(data => { 
+        setPairings(data)
+        const dashboard = data.map(pairing => {
+          const {id} = pairing
+          const tutee = pairing.tutee.name
+          const tutor = pairing.tutor.name
+          const subject = pairing.level == null ? pairing.subjects[0].level.concat(' ', pairing.subjects[0].symbol) : pairing.level 
+          const endDate = new Date(pairing.tutor.endDate).toDateString()
+          const lastSession = Math.floor((new Date().getTime() - new Date(pairing.sessions[0].date).getTime()) / (1000 * 60 * 60 * 24))
+          return { id, tutee, tutor, subject, endDate, lastSession }
+        })
+        setDashboard(dashboard)
       })
-      setDashboard(dashboard)
-    })
+    } else {
+      getAllPairings(user.id).then(data => { 
+        setPairings(data)
+        const dashboard = data.map(pairing => {
+          const {id} = pairing
+          const tutee = pairing.tutee.name
+          const tutor = pairing.tutor.name
+          const subject = pairing.level == null ? pairing.subjects[0].level.concat(' ', pairing.subjects[0].symbol) : pairing.level 
+          const endDate = new Date(pairing.tutor.endDate).toDateString()
+          const lastSession = Math.floor((new Date().getTime() - new Date(pairing.sessions[0].date).getTime()) / (1000 * 60 * 60 * 24))
+          return { id, tutee, tutor, subject, endDate, lastSession }
+        })
+        setDashboard(dashboard)
+      })
+    }
     getAllTutees().then(data => setTutees(data))
   }
 
@@ -216,6 +230,11 @@ export default function DashboardAppPage() {
     setModalOpen(true)
   }
 
+  const handleUpdatePairing = (e) => {
+    e.preventDefault()
+    setModalOpen(false)
+  }
+
   const handleCloseModal = () => setModalOpen(false)
 
   const emptyRows = page > 0 ? Math.max(0, (1 + page) * rowsPerPage - tutees.length) : 0;
@@ -247,15 +266,16 @@ export default function DashboardAppPage() {
       >
         <Box sx={style}>
           <Typography id="modal-modal-title" variant="h6" component="h2">
-            Add new tutee
+            Update current pairing (feature to be added!)
           </Typography>
           <Typography id="modal-modal-description" sx={{ mt: 2 }}>
-            <form>
+            <form onSubmit={handleUpdatePairing}>
               <div>
-                <TextField name="tutee" label="Tutee name" />
-                <TextField name="tutor" label="Tutor name" />
-                <TextField name="level" label="Level and subject" />
-                <TextField name="organisation" label="Partner organisation" />
+                <TextField name="tutee" label="Tutee name" sx={{ py: 0.5 }}/>
+                <TextField name="tutor" label="Tutor name" sx={{ py: 0.5 }}/>
+                <TextField name="level" label="Level and subject" sx={{ py: 0.5 }}/>
+                <TextField name="tutorNum" label="Tutor number" sx={{ py: 0.5 }}/>
+                <TextField name="endDate" label="Tutor end date" sx={{ py: 0.5 }}/>
               </div>
               <Button type='submit' variant='contained'>Create new</Button>
             </form>
@@ -274,7 +294,7 @@ export default function DashboardAppPage() {
             Hi {user.username}, Welcome back
           </Typography>
           <Button variant="contained" startIcon={<Iconify icon="eva:plus-fill" />} onClick={handleNewUser}>
-            New Tutee
+            Update Pairing
           </Button>
         </Stack>
 

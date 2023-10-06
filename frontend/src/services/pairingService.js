@@ -8,6 +8,14 @@ export const setPairingToken = newToken => {
   token = `Bearer ${newToken}`
 }
 
+export const getMasterPairings = async () => {
+    const config = {
+        headers: { Authorization: token },
+    }
+    const res = await axios.get(baseUrl, config)
+    return res.data
+}
+
 export const getAllPairings = async (userId) => {
     const config = {
         headers: { Authorization: token },
