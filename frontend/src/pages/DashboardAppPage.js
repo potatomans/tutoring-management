@@ -167,7 +167,11 @@ export default function DashboardAppPage() {
         setDashboard(dashboard)
       })
     }
-    getAllTutees().then(data => setTutees(data))
+    try {
+      getAllTutees().then(data => setTutees(data))
+    } catch {
+      navigate('/login')
+    }
   }
 
   const handleViewMore = (id) => {

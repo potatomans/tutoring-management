@@ -13,7 +13,8 @@
     "lint:fix": "eslint --fix --ext .js,.jsx ./src",
     "clear-all": "rm -rf build node_modules",
     "re-start": "rm -rf build node_modules && yarn install && yarn start",
-    "re-build": "rm -rf build node_modules && yarn install && yarn build"
+    "re-build": "rm -rf build node_modules && yarn install && yarn build",
+    "build:ui": "npm run build && rm -r ../backend/build && cp -r build ../backend"
   },
   "eslintConfig": {
     "extends": [
@@ -42,6 +43,7 @@
     "@emotion/styled": "^11.10.6",
     "@faker-js/faker": "^7.6.0",
     "@iconify/react": "^4.1.0",
+    "@mui/icons-material": "^5.14.12",
     "@mui/lab": "^5.0.0-alpha.103",
     "@mui/material": "^5.11.10",
     "@mui/x-date-pickers": "^6.16.0",

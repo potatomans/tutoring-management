@@ -4,6 +4,7 @@ import { useLocation } from 'react-router-dom';
 // @mui
 import { styled } from '@mui/material/styles';
 import { Link, Container, Typography, TextField, Divider, Stack, Button, Accordion, AccordionSummary, AccordionDetails } from '@mui/material';
+import { ExpandMore } from '@mui/icons-material'
 
 // components
 import { useEffect, useState } from 'react';
@@ -20,15 +21,16 @@ import { getPairing } from '../services/pairingService';
 const StyledRoot = styled('div')(({ theme }) => ({
     [theme.breakpoints.up('md')]: {
         display: 'flex',
+        justifyContent: 'space-between',
+        maxWidth: 700
     },
 }));
-
 
 const SessionRecords = ({ sessions }) => (
         <Typography>
         {sessions.map(session => (
-            <Accordion>
-                <AccordionSummary>
+            <Accordion sx={{ maxWidth: 700 }}>
+                <AccordionSummary expandIcon={<ExpandMore />}>
                     <Typography variant='h6'>
                         {new Date(session.date).toDateString()}
                     </Typography>
@@ -78,72 +80,31 @@ export default function UserInfoPage() {
             <StyledRoot>
                 <h1>{tuteeName}</h1>
             </StyledRoot>
-                <Accordion>
-                <AccordionSummary
-                >
-                <Typography variant='h5'>Tutee details</Typography>
-                </AccordionSummary>
-                <AccordionDetails>
-                <Typography>
-                    <h2>Level/Subject(s)</h2>
-                    <p>{subject}</p>
-                    <h2>Location</h2>
-                    <p>{location}</p>
-                    <h2>Number of sessions</h2>
-                    <p>{noOfSessions}</p>
-                    <h2>Organisation</h2>
-                    <p>{organisation}</p>
-                </Typography>
-                </AccordionDetails>
-                </Accordion>
-                <Accordion>
-                <AccordionSummary
-                >
-                <Typography variant='h5'>Tutor details</Typography>
-                </AccordionSummary>
-                <AccordionDetails>
-                <Typography>
-                    <h2>Tutor</h2>
-                    <p>{tutorName}</p>
-                    <h2>Phone number</h2>
-                    <p>{tutorNum}</p>
-                    <h2>Tutoring end date</h2>
-                    <p>{endDate}</p>
-                </Typography>
-                </AccordionDetails>
-                </Accordion>
-                <Accordion>
-                <AccordionSummary
-                >
-                <Typography variant='h5'>Tutee assessments</Typography>
-                </AccordionSummary>
-                <AccordionDetails>
-                <Typography>
-                    <h2>Strengths</h2>
-                    <p>{strengths}</p>
-                    <h2>Weaknesses</h2>
-                    <p>{weaknesses}</p>
-                </Typography>
-                </AccordionDetails>
-                </Accordion>
-                <Accordion>
-                <AccordionSummary
-                >
-                <Typography variant='h5'>Tutee records</Typography>
-                </AccordionSummary>
-                <AccordionDetails>
-                <Typography>
-                    {sessions ? <SessionRecords sessions={sessions} /> : null}
-                </Typography>
-                </AccordionDetails>
-                </Accordion>
-                
-
+            <StyledRoot>
+                <Typography variant='h5'>Level/Subject(s)</Typography>
+                <Typography variant='subtitle3'>{subject}</Typography>
+            </StyledRoot>
+            <StyledRoot>
+                <Typography variant='h5'>Number of sessions</Typography>
+                <Typography variant='subtitle3'>{noOfSessions}</Typography>
+            </StyledRoot>
+            <StyledRoot>
+                <Typography variant='h5'>Strengths</Typography>
+                <Typography variant='subtitle3' sx={{ maxWidth: 500 }}>{strengths}</Typography>
+            </StyledRoot>
+            <StyledRoot>
+                <Typography variant='h5'>Weaknesses</Typography>
+                <Typography variant='subtitle3'>{weaknesses}</Typography>
+            </StyledRoot>
+            <StyledRoot>
+                <Typography variant='h5'>Tutor name</Typography>
+                <Typography variant='subtitle3'>{tutorName}</Typography>
+            </StyledRoot>
+            <Typography variant='h5'>Tutee Records</Typography>
+            {sessions ? <SessionRecords sessions={sessions} /> : null}
             <Helmet>
                 <title> {tuteeName || 'Tutor Info'} </title>
             </Helmet>
-
-
         </>
     )
 }
