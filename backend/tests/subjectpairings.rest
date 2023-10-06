@@ -1,7 +1,0 @@
-POST http://localhost:3001/api/subjectpairings
-Content-Type: application/json
-
-{
-    "subjectId": "1",
-    "pairingId": "9"
-}
