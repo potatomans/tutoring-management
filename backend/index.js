@@ -18,6 +18,7 @@ const waitingListRouter = require('./controllers/waitinglist')
 
 app.use(express.json())
 app.use(cors())
+app.use(express.static('build'))
 
 app.use('/api/users', usersRouter)
 app.use('/api/tutees', tuteesRouter)

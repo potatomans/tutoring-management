@@ -1,6 +1,6 @@
 import axios from 'axios'
 
-const baseUrl = 'http://localhost:3001/api/waitinglist'
+const baseUrl = '/api/waitinglist'
 
 export const createWaitingList = async (item) => {
     const res = await axios.post(baseUrl, item)

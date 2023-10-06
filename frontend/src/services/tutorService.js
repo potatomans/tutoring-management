@@ -1,6 +1,6 @@
 import axios from 'axios'
 
-const baseUrl = 'http://localhost:3001/api/tutors'
+const baseUrl = '/api/tutors'
 
 let token = null
 
