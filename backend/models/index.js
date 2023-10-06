@@ -5,6 +5,7 @@ const Pairing = require('./pairing')
 const Session = require('./session')
 const Subject = require('./subject')
 const SubjectPairing = require('./subjectPairing')
+const WaitingList = require('./waitingList')
 
 Pairing.belongsTo(User)
 User.hasMany(Pairing)
@@ -31,5 +32,6 @@ module.exports = {
   Pairing,
   Session,
   Subject,
-  SubjectPairing
+  SubjectPairing,
+  WaitingList
 }

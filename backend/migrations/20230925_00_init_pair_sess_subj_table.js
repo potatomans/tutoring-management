@@ -39,6 +39,9 @@ module.exports = {
                 type: DataTypes.BOOLEAN,
                 default: true
             },
+            location: {
+                type: DataTypes.TEXT
+            },
             created_at: {
                 type: DataTypes.DATE
             },

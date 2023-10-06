@@ -8,6 +8,7 @@ import DashboardAppPage from './pages/DashboardAppPage';
 import TutorUpdatePage from './pages/TutorUpdatePage';
 import UserInfoPage from './pages/UserInfoPage';
 import LoginPage from './pages/LoginPage';
+import LandingPage from './pages/LandingPage';
 
 // ----------------------------------------------------------------------
 
@@ -19,6 +20,13 @@ export default function Router() {
       children: [
         { element: <Navigate to="dashboard/app" />, index: true }
       ],
+    },
+    {
+      path: '/landingpage',
+      element: <LandingPage />,
+      children: [
+        { element: <Navigate to="dashboard/app" />, index: true }
+      ]
     },
     {
       path: '/login',

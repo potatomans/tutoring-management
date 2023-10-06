@@ -14,6 +14,7 @@ const sessionsRouter = require('./controllers/sessions')
 const subjectsRouter = require('./controllers/subjects')
 const subjectPairingsRouter = require('./controllers/subjectpairings')
 const loginRouter = require('./controllers/login')
+const waitingListRouter = require('./controllers/waitinglist')
 
 app.use(express.json())
 app.use(cors())
@@ -26,6 +27,7 @@ app.use('/api/sessions', sessionsRouter)
 app.use('/api/subjects', subjectsRouter)
 app.use('/api/subjectpairings', subjectPairingsRouter)
 app.use('/api/login', loginRouter)
+app.use('/api/waitinglist', waitingListRouter)
 
 const start = async () => {
   await connectToDatabase()

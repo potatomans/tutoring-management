@@ -149,7 +149,7 @@ export default function TutorUpdatePage() {
             setOverview('')
             setProblems('')
             setNextSession('')
-            setSuccess('Session update added!')
+            setSuccess('Session update added! Thank you for taking your time to volunteer with us :)')
             setTimeout(() => setSuccess(null), 5000)
         } catch (error) {
             setError(error.message)
@@ -217,8 +217,8 @@ export default function TutorUpdatePage() {
                     </Stack>                
                     <Stack spacing={0.5}>
                         <StyledField value={nextSession} onChange={({ target }) => setNextSession(target.value)} name="next_session" label="What will you cover for the next session?" multiline />    
-                    </Stack>  
-                    <Button type='submit' variant='contained'>Submit</Button>
+                    </Stack> 
+                    <Button type='submit' variant='contained' sx={{ ml: 1 }}>Submit</Button>
                 </form>
             </StyledRoot>
         </>
