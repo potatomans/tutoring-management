@@ -14,7 +14,12 @@ const navConfig = [
   {
     title: 'tutor update form',
     path: '/update',
-    icon: icon('ic_analytics')
+    icon: icon('ic_blog')
+  },
+  {
+    title: 'logout',
+    path: '/login',
+    icon: icon('ic_user')
   }
 ];
 

@@ -5,11 +5,11 @@ POST http://localhost:3001/api/users
 Content-Type: application/json
 
 {
-    "username": "Test User",
-    "name": "mrtester",
-    "password": "testuser",
-    "email": "testuser@gmail.com",
-    "organisation": "testorg"
+    "username": "Search Token",
+    "name": "searchtoken",
+    "password": "hotbond1621secrettoken",
+    "email": "searchtoken@gmail.com",
+    "organisation": "EduHopeSG"
 }
 
 ###

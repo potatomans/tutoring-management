@@ -2,18 +2,19 @@ import { Helmet } from 'react-helmet-async';
 import { useState } from 'react';
 // @mui
 import { styled } from '@mui/material/styles';
-import { Link, Container, FormControlLabel, Typography, TextField, Stack, Button, Item, Switch, FormGroup, MenuItem, Select, InputLabel, FormControl, stepperClasses } from '@mui/material';
+import { Alert, Link, Container, FormControlLabel, Typography, TextField, Stack, Button, Item, Switch, FormGroup, MenuItem, Select, InputLabel, FormControl, stepperClasses } from '@mui/material';
 import { AdapterDayjs, DatePicker, LocalizationProvider } from '@mui/x-date-pickers';
 import { Dayjs } from 'dayjs';
-import users from '../_mock/user';
 // hooks
 import useResponsive from '../hooks/useResponsive';
 // services
-import { createPairing, getPairingId } from '../services/pairingService';
+import { createPairing, getPairingId, setPairingToken } from '../services/pairingService';
 import { createTutee } from '../services/tuteeService';
 import { createTutor } from '../services/tutorService';
-import { getUserId } from '../services/userService';
+import { getUserId, setUserToken } from '../services/userService';
 import { createSession } from '../services/sessionService';
+import { createSubjectPairing } from '../services/subjectpairingService';
+
 // components
 import Logo from '../components/logo';
 import Iconify from '../components/iconify';
@@ -70,70 +71,90 @@ export default function TutorUpdatePage() {
 
     const [nextSession, setNextSession] = useState('')
 
+    const [success, setSuccess] = useState(null)
+
+    const [error, setError] = useState(null)
+
     const mdUp = useResponsive('up', 'md');
 
     const handleFirstSubmit = async (e) => {
         e.preventDefault()
         // post to /api/tutees, /api/tutors, /api/pairings. NOTE: should post to /api/subjectpairings too, but that is on the admin side
-        const userId = await getUserId(manager)
-        const newTutee = await createTutee({ name: tutee, number: '8000 8000' }) // number is hardcoded because it will eventually be added on the admin's end
-        const newTutor = await createTutor({ name: tutor, endDate: '2023-11-31' }) // endDate is hardcoded
-        const pairing = {
-            userId,
-            tuteeId: newTutee.id,
-            tutorId: newTutor.id,
-            strengths,
-            weaknesses,
-            goals
+        try {
+            setUserToken(process.env.REACT_APP_SEARCH_TOKEN)
+            setPairingToken(process.env.REACT_APP_SEARCH_TOKEN)
+            const userId = await getUserId(manager)
+            const newTutee = await createTutee({ name: tutee, number: '8000 8000' }) // number is hardcoded because it will eventually be added on the admin's end
+            const newTutor = await createTutor({ name: tutor, endDate: '2023-11-31' }) // endDate is hardcoded
+            const pairing = {
+                userId,
+                tuteeId: newTutee.id,
+                tutorId: newTutor.id,
+                strengths,
+                weaknesses,
+                goals
+            }
+            await createPairing(pairing)
+            // post to /api/sessions
+            const pairingId = await getPairingId(tutee, tutor)
+            const session = {
+                pairingId, // error handling: what if no pairing is found?
+                date,
+                hours,
+                overview,
+                problems: problems || 'NIL',
+                nextSession: nextSession || 'TBC'
+            }
+            await createSession(session)
+            await createSubjectPairing(pairingId)
+
+            setManager('')
+            setStrengths('')
+            setWeaknesses('')
+            setGoals('')
+            setTutor('')
+            setTutee('')
+            setDate('')
+            setHours(0.5)
+            setOverview('')
+            setProblems('')
+            setNextSession('')
+            setSuccess('Pairings and sessions updated!')
+        } catch (error) {
+            setError(error.message)
+            setTimeout(() => setError(null), 2000)
         }
-        await createPairing(pairing)
-        // post to /api/sessions
-        const pairingId = await getPairingId(tutee, tutor)
-        const session = {
-            pairingId, // error handling: what if no pairing is found?
-            date,
-            hours,
-            overview,
-            problems: problems || 'NIL',
-            nextSession: nextSession || 'TBC'
-        }
-        await createSession(session)
-        setManager('')
-        setStrengths('')
-        setWeaknesses('')
-        setGoals('')
-        setTutor('')
-        setTutee('')
-        setDate('')
-        setHours(0.5)
-        setOverview('')
-        setProblems('')
-        setNextSession('')
-        console.log('pairings and sessions updated!')
     }
 
     const handleSubmit = async (e) => {
-        // NOTE: i have yet to solve the problem of tutors/tutees with similar names. it will be a problem as getPairingId returns an array with more than one element!
         e.preventDefault()
-        // post to /api/sessions
-        const pairingId = await getPairingId(tutee, tutor)
-        const session = {
-            pairingId, // error handling: what if no pairing is found?
-            date,
-            hours,
-            overview,
-            problems: problems || 'NIL',
-            nextSession: nextSession || 'TBC'
+        try {
+            // NOTE: i have yet to solve the problem of tutors/tutees with similar names. it will be a problem as getPairingId returns an array with more than one element!
+            // post to /api/sessions
+            setPairingToken(process.env.REACT_APP_SEARCH_TOKEN)
+            const pairingId = await getPairingId(tutee, tutor)
+            const session = {
+                pairingId,
+                date,
+                hours,
+                overview,
+                problems: problems || 'NIL',
+                nextSession: nextSession || 'TBC'
+            }
+            await createSession(session)
+            setTutor('')
+            setTutee('')
+            setDate('')
+            setHours(0.5)
+            setOverview('')
+            setProblems('')
+            setNextSession('')
+            setSuccess('Session update added!')
+            setTimeout(() => setSuccess(null), 5000)
+        } catch (error) {
+            setError(error.message)
+            setTimeout(() => setError(null), 2000)
         }
-        await createSession(session)
-        setTutor('')
-        setTutee('')
-        setDate('')
-        setHours(0.5)
-        setOverview('')
-        setProblems('')
-        setNextSession('')
-        console.log('session update added!')
     }
     return (
         <>
@@ -149,6 +170,8 @@ export default function TutorUpdatePage() {
                         </Typography>
                     </StyledContent>
                 )}
+                { success ? <Alert variant='filled' severity='success' sx={{ mb: 2 }}>{success}</Alert> : null}
+                { error ? <Alert variant='filled' severity='error' sx={{ mb: 2 }}>{error}</Alert> : null}
                 <FormGroup>
                     <FormControlLabel control={<Switch defaultChecked/>} label="First session" onChange={() => setFirst(!first)} />
                 </FormGroup>

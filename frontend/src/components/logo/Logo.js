@@ -4,6 +4,7 @@ import { Link as RouterLink } from 'react-router-dom';
 // @mui
 import { useTheme } from '@mui/material/styles';
 import { Box, Link } from '@mui/material';
+import logosvg from './logo.svg'
 
 // ----------------------------------------------------------------------
 
@@ -17,15 +18,17 @@ const Logo = forwardRef(({ disabledLink = false, sx, ...other }, ref) => {
   const PRIMARY_DARK = theme.palette.primary.dark;
 
   // OR using local (public folder)
-  // -------------------------------------------------------
-  // const logo = (
-  //   <Box
-  //     component="img"
-  //     src="/logo/logo_single.svg" => your path
-  //     sx={{ width: 40, height: 40, cursor: 'pointer', ...sx }}
-  //   />
-  // );
+  // ------------------------------------------------------
 
+  const logo = (
+    <Box
+      component="img"
+      src={logosvg}
+      sx={{ width: 40, height: 40, cursor: 'pointer', ...sx }}
+    />
+  );
+
+/*
   const logo = (
     <Box
       ref={ref}
@@ -73,6 +76,7 @@ const Logo = forwardRef(({ disabledLink = false, sx, ...other }, ref) => {
       </svg>
     </Box>
   );
+*/
 
   if (disabledLink) {
     return <>{logo}</>;

@@ -25,10 +25,12 @@ export const getPairing = async (id) => {
 }
 
 export const getPairingId = async (tutee, tutor) => {
-    const res = await axios.get(`${baseUrl}?tutee=${tutee}&tutor=${tutor}`)
+    const config = {
+        headers: { Authorization: token },
+    }
+    const res = await axios.get(`${baseUrl}?tutee=${tutee}&tutor=${tutor}`, config)
     if (res.data.length === 0) {
-        console.log('tutee and/or tutor does not exst')
-        throw new Error('tutee and/or tutor does not exst')
+        throw new Error('Tutee and/or tutor does not exst')
     }
     return Number(res.data[0].id)
 }

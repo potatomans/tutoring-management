@@ -22,8 +22,7 @@ export const getUserId = async (username) => {
     }
     const res = await axios.get(`${baseUrl}?username=${username}`, config)
     if (res.data.length === 0) {
-        console.log('volunteer manager does not exst')
-        throw new Error('volunteer manager does not exst')
+        throw new Error('Volunteer manager does not exist')
     }
     return Number(res.data[0].id)
 }

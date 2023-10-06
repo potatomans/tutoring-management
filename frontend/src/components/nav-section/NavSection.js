@@ -32,8 +32,6 @@ NavItem.propTypes = {
 function NavItem({ item }) {
   const { title, path, icon, info } = item;
 
-  console.log(item)
-
   return (
     <StyledNavItem
       component={RouterLink}

@@ -1,7 +1,7 @@
 import { useState, useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
 // @mui
-import { Link, Stack, IconButton, InputAdornment, TextField, Checkbox } from '@mui/material';
+import { Alert, Link, Stack, IconButton, InputAdornment, TextField, Checkbox } from '@mui/material';
 import { LoadingButton } from '@mui/lab';
 // components
 import Iconify from '../../../components/iconify';
@@ -27,10 +27,15 @@ export default function LoginForm() {
 
   const [showPassword, setShowPassword] = useState(false);
 
+  const [notif, setNotif] = useState(null);
+
   const handleClick = async () => {
     // post it to /api/login, then render accordingly.
     try {
         const user = await login({ username, password })
+        window.localStorage.setItem(
+          'loggedUser', JSON.stringify(user)
+        ) 
         setPairingToken(user.token)
         setSessionToken(user.token)
         setTutorToken(user.token)
@@ -41,7 +46,7 @@ export default function LoginForm() {
         setPassword('')
         navigate('/dashboard', { replace: true });
     } catch (exception) {
-        console.log('wrong credentials')
+        setNotif('Incorrect credentials')
     }
   };
 
@@ -68,12 +73,12 @@ export default function LoginForm() {
         />
       </Stack>
 
-      <Stack direction="row" alignItems="center" justifyContent="space-between" sx={{ my: 2 }}>
+      <Stack direction="row" alignItems="center" justifyContent="flex-start" sx={{ my: 2 }}>
         <Checkbox name="remember" label="Remember me" />
-        <Link variant="subtitle2" underline="hover">
-          Forgot password?
-        </Link>
+        Remember me
       </Stack>
+
+      { notif ? <Alert variant='outlined' severity='error' sx={{ mb: 2 }}>{notif}</Alert> : null}
 
       <LoadingButton fullWidth size="large" type="submit" variant="contained" onClick={handleClick}>
         Login

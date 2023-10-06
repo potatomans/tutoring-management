@@ -29,8 +29,11 @@ import {
 } from '@mui/material';
 
 // services
-import { getAllPairings } from '../services/pairingService';
-import { getAllTutees } from '../services/tuteeService';
+import { getAllPairings, setPairingToken } from '../services/pairingService';
+import { getAllTutees, setTuteeToken } from '../services/tuteeService';
+import { setSessionToken } from '../services/sessionService';
+import { setTutorToken } from '../services/tutorService';
+import { setUserToken } from '../services/userService';
 
 // components
 import Label from '../components/label';
@@ -83,7 +86,7 @@ function applySortFilter(array, comparator, query) {
     return a[1] - b[1];
   });
   if (query) {
-    return filter(array, (_user) => _user.name.toLowerCase().indexOf(query.toLowerCase()) !== -1);
+    return filter(array, (_user) => _user.tutee.toLowerCase().indexOf(query.toLowerCase()) !== -1);
   }
   return stabilizedThis.map((el) => el[0]);
 }
@@ -119,14 +122,28 @@ export default function DashboardAppPage() {
   const navigate = useNavigate()
 
   useEffect(() => {
-    if (!user) {
+    const loggedUserJSON = window.localStorage.getItem('loggedUser')
+    const parsedUser = JSON.parse(loggedUserJSON)
+    if (loggedUserJSON) {
+      setUser(parsedUser)
+      setPairingToken(parsedUser.token)
+      setSessionToken(parsedUser.token)
+      setTutorToken(parsedUser.token)
+      setTuteeToken(parsedUser.token)
+      setUserToken(parsedUser.token)
+      initDashboard(parsedUser)
+    } else if (!user && !parsedUser) {
       navigate('/login')
+    } else {
+      initDashboard(user)
     }
-    console.log(Number(user.id))
+  }, [])
+
+  const initDashboard = (user) => {
     getAllPairings(user.id, user.token).then(data => { 
       setPairings(data)
       const dashboard = data.map(pairing => {
-        const id = pairing.id
+        const {id} = pairing
         const tutee = pairing.tutee.name
         const tutor = pairing.tutor.name
         const subject = pairing.level == null ? pairing.subjects[0].level.concat(' ', pairing.subjects[0].symbol) : pairing.level 
@@ -135,13 +152,9 @@ export default function DashboardAppPage() {
         return { id, tutee, tutor, subject, endDate, lastSession }
       })
       setDashboard(dashboard)
-  })
+    })
     getAllTutees().then(data => setTutees(data))
-  }, [])
-
-
-
-  console.log('user', user)
+  }
 
   const handleViewMore = (id) => {
     navigate(`/dashboard/tutee/${id}`)
@@ -258,7 +271,7 @@ export default function DashboardAppPage() {
       <Container maxWidth="xl">
         <Stack direction="row" alignItems="center" justifyContent="space-between" mb={5}>
           <Typography variant="h4" sx={{ mb: 5 }}>
-            Hi {account.displayName}, Welcome back
+            Hi {user.username}, Welcome back
           </Typography>
           <Button variant="contained" startIcon={<Iconify icon="eva:plus-fill" />} onClick={handleNewUser}>
             New Tutee

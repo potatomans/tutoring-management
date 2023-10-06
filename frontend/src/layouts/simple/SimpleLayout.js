@@ -26,7 +26,6 @@ export default function SimpleLayout() {
       <StyledHeader>
         <Logo />
       </StyledHeader>
-
       <Outlet />
     </>
   );

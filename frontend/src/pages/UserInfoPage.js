@@ -24,8 +24,7 @@ const StyledRoot = styled('div')(({ theme }) => ({
 }));
 
 
-const SessionRecords = ({ sessions }) => {
-    return (
+const SessionRecords = ({ sessions }) => (
         <Typography>
         {sessions.map(session => (
             <Accordion>
@@ -43,14 +42,11 @@ const SessionRecords = ({ sessions }) => {
         ))}
         </Typography>
     )
-}
 
 export default function UserInfoPage() { 
     const { pathname } = useLocation()
     const pathArr = pathname.split('/')
     const id = pathArr[pathArr.length - 1]
-
-    console.log(id)
 
     useEffect(() => {
         getPairing(id).then(data => {
@@ -72,8 +68,6 @@ export default function UserInfoPage() {
     const [pairing, setPairing] = useState([])
 
     const [tutee, setTutee] = useState([])
-
-    console.log('pairing', pairing)
 
     const mdUp = useResponsive('up', 'md');
 

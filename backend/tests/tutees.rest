@@ -1,4 +1,6 @@
 GET http://localhost:3001/api/tutees
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6IkpvaG4gRG9lIiwiaWQiOjEsImlhdCI6MTY5NjQzMDE2OH0.AbPBzbddifF6Oj8-dtLGMzKTH3BcnIHY0JGbTCuLlmM
+
 
 ###
 POST http://localhost:3001/api/tutees

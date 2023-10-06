@@ -2,6 +2,6 @@ POST http://localhost:3001/api/login
 Content-Type: application/json
 
 {
-    "username": "John Doe",
-    "password": "eduhopesg"
+    "username": "Search Token",
+    "password": "hotbond1621secrettoken"
 }

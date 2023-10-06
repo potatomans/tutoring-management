@@ -3,9 +3,7 @@ import { sample } from 'lodash';
 import data from '../data/data.json'
 
 // ----------------------------------------------------------------------
-const tutees = data.tutees
-
-console.log(tutees)
+const {tutees} = data
 
 const users = tutees.map((tutee, index) => ({
   id: faker.datatype.uuid(),
@@ -24,10 +22,6 @@ const users = tutees.map((tutee, index) => ({
   sessionDate: tutee.sessionDate,
   sessionDescrip: tutee.sessionDescrip
 }))
-
-
-
-console.log("users: ", users)
 
 /*
 const users = [...Array(24)].map((_, index) => ({
