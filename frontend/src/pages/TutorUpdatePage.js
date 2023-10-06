@@ -83,6 +83,7 @@ export default function TutorUpdatePage() {
         try {
             setUserToken(process.env.REACT_APP_SEARCH_TOKEN)
             setPairingToken(process.env.REACT_APP_SEARCH_TOKEN)
+            console.log('env', process.env.REACT_APP_SEARCH_TOKEN)
             const userId = await getUserId(manager)
             const newTutee = await createTutee({ name: tutee, number: '8000 8000' }) // number is hardcoded because it will eventually be added on the admin's end
             const newTutor = await createTutor({ name: tutor, endDate: '2023-11-31' }) // endDate is hardcoded

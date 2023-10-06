@@ -15,27 +15,6 @@ import LandingPage from './pages/LandingPage';
 export default function Router() {
   const routes = useRoutes([
     {
-      path: '/update',
-      element: <TutorUpdatePage />,
-      children: [
-        { element: <Navigate to="dashboard/app" />, index: true }
-      ],
-    },
-    {
-      path: '/landingpage',
-      element: <LandingPage />,
-      children: [
-        { element: <Navigate to="dashboard/app" />, index: true }
-      ]
-    },
-    {
-      path: '/login',
-      element: <LoginPage />,
-      children: [
-        { element: <Navigate to="dashboard/app" />, index: true }
-      ]
-    },
-    {
       path: '/dashboard',
       element: <DashboardLayout />,
       children: [
@@ -48,9 +27,24 @@ export default function Router() {
       ],
     },
     {
+      path: '/update',
+      element: <TutorUpdatePage />
+    },
+    {
+      path: '/landingpage',
+      element: <LandingPage />
+    },
+    {
+      path: '/login',
+      element: <LoginPage />
+    },
+    {
       element: <SimpleLayout />, // this is the layout before DashboardLayout loads
       children: [
         { element: <Navigate to="/dashboard/app" />, index: true },
+        { path: 'update', element: <TutorUpdatePage /> },
+        { path: 'landingpage', element: <LandingPage /> },
+        { path: 'login', element: <LoginPage /> },
         { path: '404', element: <Page404 /> },
         { path: '*', element: <Navigate to="/404" /> },
       ],

@@ -2,6 +2,7 @@ const express = require('express')
 require('express-async-errors')
 const app = express()
 const cors = require('cors')
+const path = require('path')
 
 const { PORT } = require('./util/config')
 const { connectToDatabase } = require('./util/db')
@@ -18,7 +19,7 @@ const waitingListRouter = require('./controllers/waitinglist')
 
 app.use(express.json())
 app.use(cors())
-app.use(express.static('build'))
+app.use(express.static(path.join(__dirname, 'build')))
 
 app.use('/api/users', usersRouter)
 app.use('/api/tutees', tuteesRouter)
@@ -29,6 +30,9 @@ app.use('/api/subjects', subjectsRouter)
 app.use('/api/subjectpairings', subjectPairingsRouter)
 app.use('/api/login', loginRouter)
 app.use('/api/waitinglist', waitingListRouter)
+app.get('*', (req, res) => {
+  res.sendFile(path.join(__dirname, 'build', 'index.html'));
+});
 
 const start = async () => {
   await connectToDatabase()
