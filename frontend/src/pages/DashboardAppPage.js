@@ -391,7 +391,7 @@ export default function DashboardAppPage() {
           <TablePagination
             rowsPerPageOptions={[5, 10, 25]}
             component="div"
-            count={tutees.length}
+            count={pairings.length}
             rowsPerPage={rowsPerPage}
             page={page}
             onPageChange={handleChangePage}

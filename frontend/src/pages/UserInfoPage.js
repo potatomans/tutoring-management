@@ -3,7 +3,7 @@ import { useLocation } from 'react-router-dom';
 
 // @mui
 import { styled } from '@mui/material/styles';
-import { Link, Container, Typography, TextField, Divider, Stack, Button, Accordion, AccordionSummary, AccordionDetails } from '@mui/material';
+import { Box, Link, Container, Typography, TextField, Divider, Stack, Button, Accordion, AccordionSummary, AccordionDetails } from '@mui/material';
 import { ExpandMore } from '@mui/icons-material'
 
 // components
@@ -37,7 +37,9 @@ const SessionRecords = ({ sessions }) => (
                 </AccordionSummary>
                 <AccordionDetails>
                     <Typography>
-                        {session.overview}
+                        <Box sx={{ fontWeight: 'bold' }}>Overview: </Box>{session.overview}
+                        <Box sx={{ fontWeight: 'bold' }}>Problems: </Box>{session.problems}
+                        <Box sx={{ fontWeight: 'bold' }}>Plan for next session: </Box>{session.nextSession}
                     </Typography>
                 </AccordionDetails>
             </Accordion>
