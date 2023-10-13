@@ -99,4 +99,15 @@ router.post('/', async (req, res) => {
     res.status(201).json(pairing)
 })
 
+router.put('/:id', tokenExtractor, async (req, res) => {  
+    const pairing = await Pairing.findByPk(req.params.id)
+    if (pairing) {
+        pairing.userId = req.body.userId
+        await pairing.save()
+        res.json(pairing)
+    } else {
+        res.status(404).end()
+    }
+})
+
 module.exports = router

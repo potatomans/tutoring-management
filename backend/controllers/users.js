@@ -22,7 +22,7 @@ router.get('/:id', tokenExtractor, async (req, res) => {
     res.json(user)
 })
 
-router.post('/', async (req, res) => {
+router.post('/', tokenExtractor, async (req, res) => {
     const { username, name, password, email, organisation } = req.body
     
     const saltRounds = 10
@@ -32,7 +32,7 @@ router.post('/', async (req, res) => {
     res.status(201).json(user)
 })
 
-router.put('/:id', async (req, res) => {
+router.put('/:id', tokenExtractor, async (req, res) => {
     const user = await User.findByPk(req.params.id)
     if (user) {
         const saltRounds = 10
