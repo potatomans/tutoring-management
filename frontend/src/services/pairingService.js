@@ -38,7 +38,7 @@ export const getPairingId = async (tutee, tutor) => {
     }
     const res = await axios.get(`${baseUrl}?tutee=${tutee}&tutor=${tutor}`, config)
     if (res.data.length === 0) {
-        throw new Error('Tutee and/or tutor does not exst')
+        throw new Error('Tutee and/or tutor does not exist. Maybe try their first names?')
     }
     return Number(res.data[0].id)
 }
