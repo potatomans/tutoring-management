@@ -137,6 +137,12 @@ export default function DashboardAppPage() {
     }
   }, [])
 
+  // if token expires
+    getMasterPairings().catch(error => {
+      window.localStorage.removeItem('loggedUser')
+      navigate('/login')
+    })
+
   const initDashboard = (user) => {
     if (user.username === 'EduHopeSG') {
       getMasterPairings().then(data => { 
