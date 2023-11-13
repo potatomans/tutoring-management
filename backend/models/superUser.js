@@ -1,10 +1,10 @@
-const { Model, DataTypes } = require('sequelize')
+const { Model, DataTypes } = require("sequelize");
 
-const { sequelize } = require('../util/db')
+const { sequelize } = require("../util/db");
 
-class User extends Model {}
+class SuperUser extends Model {}
 
-User.init(
+SuperUser.init(
   {
     id: {
       type: DataTypes.INTEGER,
@@ -29,14 +29,6 @@ User.init(
       type: DataTypes.TEXT,
       allowNull: false,
     },
-    organisation: {
-      type: DataTypes.TEXT,
-    },
-    superUserId: {
-      type: DataTypes.INTEGER,
-      allowNull: true,
-      references: { model: "superusers", key: "id" },
-    },
   },
   {
     sequelize,
@@ -46,4 +38,4 @@ User.init(
   }
 );
 
-module.exports = User
+module.exports = SuperUser;
