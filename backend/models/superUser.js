@@ -17,10 +17,6 @@ SuperUser.init(
         isEmail: true,
       },
     },
-    username: {
-      type: DataTypes.TEXT,
-      allowNull: false,
-    },
     name: {
       type: DataTypes.TEXT,
       allowNull: false,
@@ -34,7 +30,7 @@ SuperUser.init(
     sequelize,
     underscored: true,
     timestamps: true,
-    modelName: "superuser",
+    modelName: "super_user",
   }
 );
 

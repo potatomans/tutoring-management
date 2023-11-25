@@ -1,11 +1,11 @@
 const jwt = require('jsonwebtoken')
 const bcrypt = require('bcrypt')
 const router = require('express').Router()
-const { User } = require('../models')
+const { User, SuperUser } = require('../models')
 
+// login API for normal user (volunteer manager)
 router.post('/', async (req, res) => {
     const { username, password } = req.body
-
     const user = await User.findOne({
         where: {
             username: username
@@ -17,15 +17,42 @@ router.post('/', async (req, res) => {
           error: 'invalid username or password'
         })
     }
-
     const userForToken = {
         username: user.username,
         id: user.id
     }
-
     const token = jwt.sign(userForToken, process.env.SECRET, { expiresIn: 60*60*24 })
-
     res.status(200).send({ token, username: user.username, name: user.name, id: user.id })
+})
+
+// login API for a Super-User
+router.post('/superUser', async (req,res)=>{
+    const {email, password} = req.body
+    const superUser = await SuperUser.findOne({
+        where:{
+            email: email
+        }
+    })
+    const passwordCorrect = (superUser != null) && (await bcrypt.compare(password, superUser.password))
+    if (!(superUser && passwordCorrect)){
+        res.status(401).json({
+            error: 'Invalid Username or Password'
+        })
+    }
+    const superUserForToken = {
+        email: superUser.email,
+        id: superUser.id,
+        name: superUser.name,
+        userType: "superUser"
+    }
+    const superUserToken = jwt.sign(superUserForToken, process.env.SECRET, {expiresIn: 3600*24})
+    res.status(200).json({
+        superUserToken, email,
+        name: superUser.name,
+        id: superUser.id,
+        userType: 'superUser' 
+    })
+
 })
 
 module.exports = router

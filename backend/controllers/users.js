@@ -3,7 +3,7 @@ const router = require('express').Router()
 
 const { User, Pairing } = require('../models')
 const { Op } = require('sequelize')
-const tokenExtractor = require('../authMiddleware')
+const {tokenExtractor} = require('../authMiddleware')
 
 router.get('/', tokenExtractor, async (req, res) => {
     const users = await User.findAll({
@@ -22,13 +22,13 @@ router.get('/:id', tokenExtractor, async (req, res) => {
     res.json(user)
 })
 
-router.post('/', tokenExtractor, async (req, res) => {
-    const { username, name, password, email, organisation } = req.body
+router.post('/', async (req, res) => {
     
+    const { username, name, password, email, organisation, superUserId } = req.body
     const saltRounds = 10
     const passwordHash = await bcrypt.hash(password, saltRounds)
 
-    const user = await User.create({ username, name, password: passwordHash, email, organisation })
+    const user = await User.create({ username, name, password: passwordHash, email, organisation, superUserId })
     res.status(201).json(user)
 })
 

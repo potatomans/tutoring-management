@@ -20,7 +20,7 @@ Tutee.init({
     superUserId: {
         type: DataTypes.INTEGER,
         allowNull: true,
-        references: { model: 'superusers', key: 'id' }
+        references: { model: 'superUsers', key: 'id' }
     },
 }, {
     sequelize,

@@ -16,6 +16,7 @@ const subjectsRouter = require('./controllers/subjects')
 const subjectPairingsRouter = require('./controllers/subjectpairings')
 const loginRouter = require('./controllers/login')
 const waitingListRouter = require('./controllers/waitinglist')
+const superUserRouter = require('./controllers/superusers')
 
 app.use(express.json())
 app.use(cors())
@@ -30,6 +31,8 @@ app.use('/api/subjects', subjectsRouter)
 app.use('/api/subjectpairings', subjectPairingsRouter)
 app.use('/api/login', loginRouter)
 app.use('/api/waitinglist', waitingListRouter)
+app.use('/api/superuser', superUserRouter)
+app.get('/api/test',(req,res)=>res.json("Test succeded"))
 app.get('*', (req, res) => {
   res.sendFile(path.join(__dirname, 'build', 'index.html'));
 });

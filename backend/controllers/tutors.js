@@ -2,7 +2,7 @@ const router = require('express').Router()
 
 const { Tutor, Tutee } = require('../models')
 const { Op } = require('sequelize')
-const tokenExtractor = require('../authMiddleware')
+const {tokenExtractor} = require('../authMiddleware')
 
 router.get('/', tokenExtractor, async (req, res) => {
     const tutors = await Tutor.findAll({
@@ -23,8 +23,12 @@ router.get('/:id', tokenExtractor, async (req, res) => {
 })
 
 router.post('/', async (req, res) => {
-    const tutor = await Tutor.create(req.body)
-    res.status(201).json(tutor)
+    try{
+        const tutor = await Tutor.create(req.body)
+        res.status(201).json(tutor)
+    } catch (error) {
+        console.log(error)
+    }
 })
 
 module.exports = router
