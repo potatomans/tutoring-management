@@ -23,7 +23,7 @@ Tutor.init({
     superUserId: {
         type: DataTypes.INTEGER,
         allowNull: true,
-        references: { model: 'superusers', key: 'id' }
+        references: { model: 'super_users', key: 'id' }
     },
 }, {
     sequelize,
