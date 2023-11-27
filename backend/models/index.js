@@ -26,6 +26,15 @@ Subject.belongsToMany(Pairing, { through: SubjectPairing })
 Session.belongsTo(Pairing)
 Pairing.hasMany(Session)
 
+Tutor.belongsTo(SuperUser)
+SuperUser.hasMany(Tutor)
+
+Tutee.belongsTo(SuperUser)
+SuperUser.hasMany(Tutee)
+
+User.belongsTo(SuperUser)
+SuperUser.hasMany(User)
+
 module.exports = {
   User,
   Tutee,
