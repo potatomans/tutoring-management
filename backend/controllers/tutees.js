@@ -3,7 +3,7 @@ const router = require('express').Router()
 const { Tutee, Tutor } = require('../models')
 const { Op } = require('sequelize')
 const { sequelize } = require('../util/db')
-const tokenExtractor = require('../authMiddleware')
+const {tokenExtractor} = require('../authMiddleware')
 
 router.get('/', tokenExtractor, async (req, res) => {
     const tutees = await Tutee.findAll({

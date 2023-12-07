@@ -16,7 +16,12 @@ Tutee.init({
     },
     number: {
         type: DataTypes.TEXT
-    }
+    },
+    superUserId: {
+        type: DataTypes.INTEGER,
+        allowNull: true,
+        references: { model: 'superUsers', key: 'id' }
+    },
 }, {
     sequelize,
     timestamps: true,
