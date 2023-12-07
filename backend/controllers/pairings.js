@@ -110,4 +110,12 @@ router.put('/:id', tokenExtractor, async (req, res) => {
     }
 })
 
+router.delete('/:id', tokenExtractor, async (req, res) => {
+    const pairing = await Pairing.findByPk(req.params.id)
+    if (pairing) {
+        await pairing.destroy()
+    }
+    res.status(204).end()
+})
+
 module.exports = router

@@ -47,6 +47,7 @@ export default function LoginForm() {
         navigate('/dashboard', { replace: true });
     } catch (exception) {
         setNotif('Incorrect credentials')
+        setTimeout(() => setNotif(null), 1000)
     }
   };
 

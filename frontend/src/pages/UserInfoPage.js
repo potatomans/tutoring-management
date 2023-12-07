@@ -32,7 +32,7 @@ const SessionRecords = ({ sessions }) => (
             <Accordion sx={{ maxWidth: 700 }}>
                 <AccordionSummary expandIcon={<ExpandMore />}>
                     <Typography variant='h6'>
-                        {new Date(session.date).toDateString()}
+                        {new Date(session.date).toDateString()} ({ session.hours }h)
                     </Typography>
                 </AccordionSummary>
                 <AccordionDetails>
