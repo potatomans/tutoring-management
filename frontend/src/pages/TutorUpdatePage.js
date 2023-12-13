@@ -141,7 +141,11 @@ export default function TutorUpdatePage() {
                 problems: problems || 'NIL',
                 nextSession: nextSession || 'TBC'
             }
-            await createSession(session)
+            const pair ={
+                tutor : tutor || 'NIL',
+                tutee : tutee || 'NIL'
+            }
+            await createSession(session, pair)
             setTutor('')
             setTutee('')
             setDate('')

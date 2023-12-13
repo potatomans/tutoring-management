@@ -1,6 +1,6 @@
 import axios from 'axios'
 
-const baseUrl = '/api/sessions'
+const baseUrl = 'http://localhost:3001/api/sessions'
 
 let token = null
 
@@ -16,7 +16,7 @@ export const getAllSession = async () => {
     return res.data
 }
 
-export const createSession = async (session) => {
-    const res = await axios.post(baseUrl, session)
+export const createSession = async (session, pair) => {
+    const res = await axios.post(baseUrl,{ session,  pair})
     return res.data
 }
