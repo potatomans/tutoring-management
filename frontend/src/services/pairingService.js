@@ -1,6 +1,12 @@
 import axios from 'axios'
+import { localTesting } from './serviceConstants';
 
-const baseUrl = '/api/pairings'
+let baseUrl;
+if (localTesting) {
+  baseUrl = 'http://localhost:3001/api/pairings';
+} else {
+  baseUrl = '/api/pairings';
+}
 
 let token = null
 
