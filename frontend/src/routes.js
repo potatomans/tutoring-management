@@ -2,6 +2,7 @@ import { Navigate, useRoutes } from 'react-router-dom';
 // layouts
 import DashboardLayout from './layouts/dashboard';
 import SimpleLayout from './layouts/simple';
+import SuperUserLayout from './layouts/superUserLayout'
 //
 import Page404 from './pages/Page404';
 import DashboardAppPage from './pages/DashboardAppPage';
@@ -9,6 +10,9 @@ import TutorUpdatePage from './pages/TutorUpdatePage';
 import UserInfoPage from './pages/UserInfoPage';
 import LoginPage from './pages/LoginPage';
 import LandingPage from './pages/LandingPage';
+import SuperUsersUserListPage from './pages/SuperUsersUserListPage';
+import SuperUsersTutorListPage from './pages/SuperUsersTutorListPage';
+import SuperUsersTuteeListPage from './pages/SuperUsersTuteeListPage';
 
 // ----------------------------------------------------------------------
 
@@ -22,21 +26,31 @@ export default function Router() {
         { path: 'app', element: <DashboardAppPage /> },
         {
           path: 'tutee/:id', // /dashboard/user/:id
-          element: <UserInfoPage />
+          element: <UserInfoPage />,
         },
       ],
     },
     {
+      path: '/superuser',
+      element: <SuperUserLayout />,
+      children: [
+        { element: <Navigate to="/superuser/users" />, index: true },
+        { path: 'users', element: <SuperUsersUserListPage /> },
+        { path: 'tutors', element: <SuperUsersTutorListPage /> },
+        { path: 'tutees', element: <SuperUsersTuteeListPage /> },
+      ],
+    },
+    {
       path: '/update',
-      element: <TutorUpdatePage />
+      element: <TutorUpdatePage />,
     },
     {
       path: '/landingpage',
-      element: <LandingPage />
+      element: <LandingPage />,
     },
     {
       path: '/login',
-      element: <LoginPage />
+      element: <LoginPage />,
     },
     {
       element: <SimpleLayout />, // this is the layout before DashboardLayout loads
