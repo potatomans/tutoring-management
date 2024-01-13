@@ -70,9 +70,9 @@ const SuperUsersUserListPage = () => {
 
   return (
     <>
-      <helmet>
+      <Helmet>
         <title>SU Users-List</title>
-      </helmet>
+      </Helmet>
       {/* <p>{JSON.stringify(superUser)}</p>
       <p>{JSON.stringify(userList)}</p> */}
       <Container maxWidth="xl">
@@ -96,7 +96,7 @@ const SuperUsersUserListPage = () => {
                   {userList.map((user)=>{
                     const {id, name, email, username} = user  
                     return (
-                      <TableRow>
+                      <TableRow key={id}>
                         <TableCell align="left">{name}</TableCell>
                         <TableCell align="left">{email}</TableCell>
                         <TableCell align="right">
