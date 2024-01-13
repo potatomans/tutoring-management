@@ -8,7 +8,7 @@ import { Dayjs } from 'dayjs';
 // hooks
 import useResponsive from '../hooks/useResponsive';
 // services
-import { createPairing, getPairingId, setPairingToken } from '../services/pairingService';
+import { createPairing, getPairingId, checkPairingExist, setPairingToken } from '../services/pairingService';
 import { createTutee } from '../services/tuteeService';
 import { createTutor } from '../services/tutorService';
 import { getUserId, setUserToken } from '../services/userService';
@@ -81,6 +81,10 @@ export default function TutorUpdatePage() {
         e.preventDefault()
         // post to /api/tutees, /api/tutors, /api/pairings. NOTE: should post to /api/subjectpairings too, but that is on the admin side
         try {
+            const pairingExist = await checkPairingExist(tutee, tutor)
+            if (pairingExist) {
+                throw new Error ("Pairing already exists in database.")
+            }
             setUserToken(process.env.REACT_APP_SEARCH_TOKEN)
             setPairingToken(process.env.REACT_APP_SEARCH_TOKEN)
             const userId = await getUserId(manager)
