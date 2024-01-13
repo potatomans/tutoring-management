@@ -12,3 +12,8 @@ export const login = async (userObj) => {
     const res = await axios.post(baseUrl, userObj)
     return res.data
 }
+
+export const superUserLogin = async (superUserObj) => {
+  const res = await axios.post(`${baseUrl}/superUser`, superUserObj);
+  return res.data;
+};
