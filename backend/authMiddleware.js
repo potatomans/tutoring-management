@@ -17,4 +17,15 @@ const tokenExtractor = (req, res, next) => {
   next()
 }
 
-module.exports = tokenExtractor
+const checkIfSuperUser = (req,res,next) => {
+  if (!req.decodedToken){
+    res.status(401).json({error:"No decoded token"})
+  }
+  if (req.decodedToken.userType === 'superUser'){
+    next()
+  } else {
+    res.status(401).json({error: "No superUser token found"})
+  }
+}
+
+module.exports = {tokenExtractor, checkIfSuperUser}

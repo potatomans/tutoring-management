@@ -2,7 +2,7 @@ const router = require('express').Router()
 
 const { Pairing, Session, User, Subject, Tutee, Tutor } = require('../models')
 const { Op } = require('sequelize')
-const tokenExtractor = require('../authMiddleware')
+const {tokenExtractor} = require('../authMiddleware')
 
 router.get('/', tokenExtractor, async (req, res) => {
     const pairings = await Pairing.findAll({

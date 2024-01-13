@@ -26,17 +26,19 @@ const connectToDatabase = async () => {
 
 const migrationConf = {
   migrations: {
-    glob: 'migrations/*.js',
+    glob:"./migrations/*.js",
   },
-  storage: new SequelizeStorage({ sequelize, tableName: 'migrations' }),
+  storage: new SequelizeStorage({ sequelize, tableName: "migrations" }),
   context: sequelize.getQueryInterface(),
   logger: console,
-}
+};
   
 const runMigrations = async () => {
+  // console.log(migrationConf)
   const migrator = new Umzug(migrationConf)
   const migrations = await migrator.up()
-  console.log('Migrations up to date', {
+  console.log('Migrations up to date', 
+  migrations, {
     files: migrations.map((mig) => mig.name),
   })
 }

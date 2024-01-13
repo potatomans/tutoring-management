@@ -19,7 +19,12 @@ Tutor.init({
     },
     endDate: {
         type: DataTypes.DATE,
-    }
+    },
+    superUserId: {
+        type: DataTypes.INTEGER,
+        allowNull: true,
+        references: { model: 'super_users', key: 'id' }
+    },
 }, {
     sequelize,
     timestamps: true,
