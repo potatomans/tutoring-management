@@ -17,7 +17,7 @@ import {
 } from '@mui/material';
 
 // services
-import {getAllSuperUserUsers, setSuperUserToken} from '../services/superUserService'
+import {getAllSuperUserUsers, setSuperUserToken, getUserToken} from '../services/superUserService'
 
 // components
 import SuperUserContext from '../SuperUserContext';
@@ -65,7 +65,14 @@ const SuperUsersUserListPage = () => {
   }
 
   const handleAssumeUserRole = (id) => {
-
+    getUserToken(id).then((data)=>{
+      window.localStorage.setItem(
+        'loggedUser',JSON.stringify(data)
+      )
+      navigate('/dashboard/app')
+    }).catch((err)=>{
+      console.log(err)
+    })
   }
 
   return (

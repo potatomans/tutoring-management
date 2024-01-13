@@ -37,3 +37,11 @@ export const getAllSuperUserTutees = async () => {
   const res = await axios.get(`${baseUrl}/tutees`, config);
   return res.data;
 };
+
+export const getUserToken = async(id) =>{
+  const config = {
+    headers: { Authorization: token}
+  }
+  const res = await axios.get(`${baseUrl}/user/${id}`, config)
+  return res.data
+}
