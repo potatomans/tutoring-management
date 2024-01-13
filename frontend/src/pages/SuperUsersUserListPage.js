@@ -7,7 +7,7 @@ const SuperUsersUserListPage = () => {
   return (
     <>
     <div>SuperUsersUserListPage</div>
-    <p>{superUser}</p>
+    <p>{JSON.stringify(superUser)}</p>
     </>
   )
 }
