@@ -12,6 +12,7 @@ let token = null;
 
 export const setSuperUserToken = (newToken) => {
   token = `Bearer ${newToken}`;
+  console.log(token)
 };
 
 export const getAllSuperUserUsers = async () => {
