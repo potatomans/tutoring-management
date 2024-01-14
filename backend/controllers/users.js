@@ -23,7 +23,6 @@ router.get('/:id', tokenExtractor, async (req, res) => {
 })
 
 router.post('/', async (req, res) => {
-    
     const { username, name, password, email, organisation, superUserId } = req.body
     const saltRounds = 10
     const passwordHash = await bcrypt.hash(password, saltRounds)
