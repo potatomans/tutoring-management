@@ -1,6 +1,6 @@
 import axios from 'axios'
 
-const baseUrl = '/api/sessions'
+const baseUrl = process.env.REACT_APP_TEST==="TRUE" ? 'localhost:3001/api/sessions' : '/api/sessions'
 
 let token = null
 

@@ -1,6 +1,6 @@
 import axios from 'axios'
 
-const baseUrl = '/api/tutors'
+const baseUrl = process.env.REACT_APP_TEST==="TRUE" ? 'localhost:3001/api/tutors' : '/api/tutors'
 
 let token = null
 
