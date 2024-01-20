@@ -22,6 +22,7 @@ router.get('/:id', tokenExtractor, async (req, res) => {
     res.json(tutor)
 })
 
+// create tutor
 router.post('/', async (req, res) => {
     try{
         const tutor = await Tutor.create(req.body)

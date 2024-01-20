@@ -117,4 +117,24 @@ router.get("/:id", tokenExtractor, async (req, res) => {
   res.json(superUser);
 });
 
+// Create a new user
+router.post("/users", tokenExtractor, checkIfSuperUser, async (req, res)=>{
+  console.log("Adding new User")
+  const { username, name, password, email, organisation } =
+    req.body;
+  const superUserId = req.decodedToken.id
+  const saltRounds = 10;
+  const passwordHash = await bcrypt.hash(password, saltRounds);
+  console.log(req.decodedToken)
+  const user = await User.create({
+    username,
+    name,
+    password: passwordHash,
+    email,
+    organisation,
+    superUserId,
+  });
+  res.status(201).json(user);
+})
+
 module.exports = router;

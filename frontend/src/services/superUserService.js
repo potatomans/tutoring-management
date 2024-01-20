@@ -14,6 +14,7 @@ export const setSuperUserToken = (newToken) => {
   token = `Bearer ${newToken}`;
 };
 
+
 export const getAllSuperUserUsers = async () => {
   const config = {
     headers: { Authorization: token },
@@ -44,4 +45,13 @@ export const getUserToken = async(id) =>{
   }
   const res = await axios.get(`${baseUrl}/user/${id}`, config)
   return res.data
+}
+
+export const createNewUser = async(userObj) => {
+  const config = {
+    headers: { Authorization: token },
+  };
+  const res = await axios.post(`${baseUrl}/users`, userObj, config)
+  // console.log(res)
+  return res
 }

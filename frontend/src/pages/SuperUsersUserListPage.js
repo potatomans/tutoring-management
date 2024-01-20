@@ -61,7 +61,7 @@ const SuperUsersUserListPage = () => {
   }
 
   const handleNewUser = () =>{
-
+    navigate('/superuser/users/addedit')
   }
 
   const handleAssumeUserRole = (id) => {
