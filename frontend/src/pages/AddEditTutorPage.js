@@ -32,6 +32,19 @@ const AddEditTutorPage = () => {
   const [name, setName] = useState('');
   const [endDate, setEndDate] = useState(null);
 
+  useEffect(() => {
+    if (!user) {
+      const loggedUserJSON = window.localStorage.getItem('loggedUser');
+      const parsedUser = JSON.parse(loggedUserJSON);
+      if (loggedUserJSON) {
+        setUser(parsedUser);
+      } else {
+        alert('No logged in User');
+        navigate('/login');
+      }
+    }
+  }, []);
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     setUserToken(user.token);
@@ -54,7 +67,7 @@ const AddEditTutorPage = () => {
   return (
     <>
       <Helmet>
-        <title> New User </title>
+        <title> New Tutor </title>
       </Helmet>
 
       <StyledRoot>
@@ -75,7 +88,7 @@ const AddEditTutorPage = () => {
             />
           </Stack>
 
-          <Stack spacing={0.5}>
+          <Stack spacing={0.5} sx={{m:1}}>
             <LocalizationProvider dateAdapter={AdapterDayjs}>
               <DatePicker
                 label="End Date"

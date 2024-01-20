@@ -1,14 +1,17 @@
 import PropTypes from 'prop-types';
-import { forwardRef } from 'react';
+import { forwardRef, useContext } from 'react';
 import { Link as RouterLink } from 'react-router-dom';
 // @mui
 import { useTheme } from '@mui/material/styles';
 import { Box, Link } from '@mui/material';
 import logosvg from './logo.svg'
+// context
+import SuperUserContext from '../../SuperUserContext';
 
 // ----------------------------------------------------------------------
 
 const Logo = forwardRef(({ disabledLink = false, sx, ...other }, ref) => {
+  const [superUser, _] = useContext(SuperUserContext)
   const theme = useTheme();
 
   const PRIMARY_LIGHT = theme.palette.primary.light;
@@ -80,6 +83,18 @@ const Logo = forwardRef(({ disabledLink = false, sx, ...other }, ref) => {
 
   if (disabledLink) {
     return <>{logo}</>;
+  }
+
+  if (superUser){
+    return (
+      <Link
+        to="/superuser/users"
+        component={RouterLink}
+        sx={{ display: 'contents' }}
+      >
+        {logo}
+      </Link>
+    );
   }
 
   return (
