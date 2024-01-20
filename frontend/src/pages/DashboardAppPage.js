@@ -268,44 +268,64 @@ export default function DashboardAppPage() {
   return (
     <>
       <div>
-      <Modal
-        open={modalOpen}
-        onClose={handleCloseModal}
-        aria-labelledby ="modal-modal-title"
-        aria-describedby="modal-modal-description"
-      >
-        <Box sx={style}>
-          <Typography id="modal-modal-title" variant="h6" component="h2">
-            Update current pairing (feature to be added!)
-          </Typography>
-          <Typography id="modal-modal-description" sx={{ mt: 2 }}>
-            <form onSubmit={handleUpdatePairing}>
-              <div>
-                <TextField name="tutee" label="Tutee name" sx={{ py: 0.5 }}/>
-                <TextField name="tutor" label="Tutor name" sx={{ py: 0.5 }}/>
-                <TextField name="level" label="Level and subject" sx={{ py: 0.5 }}/>
-                <TextField name="tutorNum" label="Tutor number" sx={{ py: 0.5 }}/>
-                <TextField name="endDate" label="Tutor end date" sx={{ py: 0.5 }}/>
-              </div>
-              <Button type='submit' variant='contained'>Create new</Button>
-            </form>
-          </Typography>
-        </Box>
-      </Modal>
-    </div>
+        <Modal
+          open={modalOpen}
+          onClose={handleCloseModal}
+          aria-labelledby="modal-modal-title"
+          aria-describedby="modal-modal-description"
+        >
+          <Box sx={style}>
+            <Typography id="modal-modal-title" variant="h6" component="h2">
+              Update current pairing (feature to be added!)
+            </Typography>
+            <Typography id="modal-modal-description" sx={{ mt: 2 }}>
+              <form onSubmit={handleUpdatePairing}>
+                <div>
+                  <TextField name="tutee" label="Tutee name" sx={{ py: 0.5 }} />
+                  <TextField name="tutor" label="Tutor name" sx={{ py: 0.5 }} />
+                  <TextField name="level" label="Level and subject" sx={{ py: 0.5 }} />
+                  <TextField name="tutorNum" label="Tutor number" sx={{ py: 0.5 }} />
+                  <TextField name="endDate" label="Tutor end date" sx={{ py: 0.5 }} />
+                </div>
+                <Button type="submit" variant="contained">
+                  Create new
+                </Button>
+              </form>
+            </Typography>
+          </Box>
+        </Modal>
+      </div>
 
       <Helmet>
         <title> Dashboard </title>
       </Helmet>
 
       <Container maxWidth="xl">
-        <Stack direction="row" alignItems="center" justifyContent="space-between" mb={5}>
-          <Typography variant="h4" sx={{ mb: 5 }}>
-            Hi {user.username}, Welcome back
-          </Typography>
-          <Button variant="contained" startIcon={<Iconify icon="eva:plus-fill" />} onClick={handleNewUser}>
-            Update Pairing
-          </Button>
+        <Typography variant="h4">
+          Hi {user.username}, Welcome back
+        </Typography>
+        <Stack direction="row" alignItems="right" justifyContent="right">
+          <Stack direction="row" alignItems="center" justifyContent="space-between" m={1}>
+            <Button variant="contained" startIcon={<Iconify icon="eva:plus-fill" />} onClick={handleNewUser}>
+              Pairing
+            </Button>
+            <Button
+              variant="contained"
+              startIcon={<Iconify icon="eva:plus-fill" />}
+              sx={{ ml: 1, width: 100 }}
+              onClick={() => {navigate('/user/tutors/addedit')}}
+            >
+              Tutor
+            </Button>
+            <Button
+              variant="contained"
+              startIcon={<Iconify icon="eva:plus-fill" />}
+              sx={{ ml: 1, width: 100 }}
+              onClick={() => {navigate('/user/tutees/addedit');}}
+            >
+              Tutee
+            </Button>
+          </Stack>
         </Stack>
 
         <Card>
@@ -325,7 +345,7 @@ export default function DashboardAppPage() {
                 />
                 <TableBody>
                   {filteredUsers.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((row) => {
-                    const { id, tutee, tutor, subject, endDate, lastSession } = row
+                    const { id, tutee, tutor, subject, endDate, lastSession } = row;
                     const selectedUser = selected.indexOf(tutee) !== -1;
 
                     return (
@@ -336,7 +356,7 @@ export default function DashboardAppPage() {
 
                         <TableCell component="th" scope="row" padding="none">
                           <Stack direction="row" alignItems="center" spacing={2}>
-                            <Avatar alt={tutee} src='/assets/images/avatars/avatar_10.jpg' />
+                            <Avatar alt={tutee} src="/assets/images/avatars/avatar_10.jpg" />
                             <Typography variant="subtitle2" noWrap>
                               {tutee}
                             </Typography>
@@ -352,7 +372,9 @@ export default function DashboardAppPage() {
                         <TableCell align="left">{lastSession}</TableCell>
 
                         <TableCell align="right">
-                          <Button variant="outlined" onClick={() => handleViewMore(id)}>More</Button>
+                          <Button variant="outlined" onClick={() => handleViewMore(id)}>
+                            More
+                          </Button>
                           <IconButton size="large" color="inherit" onClick={handleOpenMenu}>
                             <Iconify icon={'eva:more-vertical-fill'} />
                           </IconButton>

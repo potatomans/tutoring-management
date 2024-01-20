@@ -1,6 +1,12 @@
 import axios from 'axios'
+import { localTesting } from './serviceConstants';
 
-const baseUrl = '/api/users'
+let baseUrl;
+if (localTesting) {
+  baseUrl = 'http://localhost:3001/api/users';
+} else {
+  baseUrl = '/api/users';
+}
 
 let token = null
 
@@ -26,3 +32,19 @@ export const getUserId = async (username) => {
     }
     return Number(res.data[0].id)
 }
+
+export const createNewTutor = async (tutorObj) => {
+  const config = {
+    headers: { Authorization: token },
+  };
+  const res = await axios.post(`${baseUrl}/tutor`, tutorObj, config);
+  return res;
+};
+
+export const createNewTutee = async (tuteeObj) => {
+  const config = {
+    headers: { Authorization: token },
+  };
+  const res = await axios.post(`${baseUrl}/tutee`, tuteeObj, config);
+  return res;
+};

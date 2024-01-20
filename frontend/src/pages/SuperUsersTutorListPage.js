@@ -79,7 +79,7 @@ const SuperUsersTutorListPage = () => {
                       <TableRow key={id}>
                         <TableCell align="left">{id}</TableCell>
                         <TableCell align="left">{name}</TableCell>
-                        <TableCell align="left">{endDate.slice(0,10)}</TableCell>
+                        <TableCell align="left">{endDate?.slice(0,10)}</TableCell>
                       </TableRow>
                     );
                   })}

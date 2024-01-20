@@ -50,10 +50,11 @@ router.put('/:id', tokenExtractor, async (req, res) => {
 // create tutor
 router.post('/tutor', tokenExtractor, checkIfNotSuperUser, async (req, res) => {
     try{
-        const tutor = await Tutor.create(req.body)
+        const tutor = req.body
         tutor.userId = req.decodedToken.id
         tutor.superUserId = req.decodedToken.superUserId
-        res.status(201).json(tutor)
+        const tutorSaved = await Tutor.create(tutor);
+        res.status(201).json(tutorSaved)
     } catch (error) {
         console.log(error)
         res.status(500).json(error)
@@ -63,10 +64,11 @@ router.post('/tutor', tokenExtractor, checkIfNotSuperUser, async (req, res) => {
 // create tutee
 router.post('/tutee', tokenExtractor, checkIfNotSuperUser, async (req, res) => {
     try{
-        const tutee = await Tutee.create(req.body)
+        const tutee = req.body
         tutee.userId = req.decodedToken.id
         tutee.superUserId = req.decodedToken.superUserId
-        res.status(201).json(tutee)
+        const tuteeSaved = await Tutee.create(tutee);
+        res.status(201).json(tuteeSaved)
     } catch (error) {
         console.log(error)
         res.status(500).json(error)

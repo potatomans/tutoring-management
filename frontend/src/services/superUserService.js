@@ -52,6 +52,5 @@ export const createNewUser = async(userObj) => {
     headers: { Authorization: token },
   };
   const res = await axios.post(`${baseUrl}/users`, userObj, config)
-  // console.log(res)
   return res
 }

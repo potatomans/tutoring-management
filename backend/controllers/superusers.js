@@ -89,8 +89,14 @@ router.get("/user/:id", tokenExtractor, checkIfSuperUser, async (req, res) => {
     expiresIn: 60 * 60 * 24,
   });
   res
-  .status(200)
-  .send({ token, username: user.username, name: user.name, id: user.id });
+    .status(200)
+    .send({
+      token,
+      username: user.username,
+      name: user.name,
+      id: user.id,
+      superUserId: user.superUserId,
+    });
 });
 
 // Update password of super-user

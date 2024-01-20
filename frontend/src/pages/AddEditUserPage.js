@@ -4,29 +4,14 @@ import { useNavigate } from 'react-router-dom';
 // @mui
 import { styled } from '@mui/material/styles';
 import {
-  Alert,
-  Link,
-  Container,
-  FormControlLabel,
   Typography,
   TextField,
   Stack,
   Button,
-  Item,
-  Switch,
-  FormGroup,
-  MenuItem,
-  Select,
-  InputLabel,
-  FormControl,
-  stepperClasses,
 } from '@mui/material';
-import { AdapterDayjs, DatePicker, LocalizationProvider } from '@mui/x-date-pickers';
 import SuperUserContext from '../SuperUserContext';
 // services
 import {setSuperUserToken, createNewUser} from '../services/superUserService'
-// hooks
-import useResponsive from '../hooks/useResponsive';
 // ----------------------------------------------------------------------
 
 const StyledRoot = styled('div')(({ theme }) => ({
@@ -36,16 +21,6 @@ const StyledRoot = styled('div')(({ theme }) => ({
       flexDirection: 'column'
     },
   }));
-
-const StyledContent = styled('div')(({ theme }) => ({
-    maxWidth: 600,
-    margin: 'auto',
-    minHeight: '30vh',
-    display: 'flex',
-    justifyContent: 'center',
-    flexDirection: 'column',
-    padding: theme.spacing(12, 0),
-}));
 
 const StyledField = styled(TextField)(({ theme }) => ({
     padding: theme.spacing(1)
@@ -60,7 +35,6 @@ const AddEditUserPage = () => {
   const [email, setEmail] = useState('');
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
-  const mdUp = useResponsive('up', 'md');
 
   useEffect(()=>{
     if (!superUser){
@@ -76,7 +50,6 @@ const AddEditUserPage = () => {
   
   const handleSubmit = async (e) => {
     e.preventDefault()
-    console.log(superUser.superUserToken)
     setSuperUserToken(superUser.superUserToken)
     try{
       const userObj = {
@@ -85,12 +58,12 @@ const AddEditUserPage = () => {
       const res = await createNewUser(userObj)
       if (!(res.status === 201)) throw Error
       alert('User Added')
-      // setName('')
-      // setEmail('')
-      // setUsername('')
-      // setPassword('')
+      setName('')
+      setEmail('')
+      setUsername('')
+      setPassword('')
     }catch (error){
-      alert('User not added!')
+      alert('Error! User not added!')
       console.log(error)
     }
   }

@@ -14,6 +14,8 @@ import SuperUsersUserListPage from './pages/SuperUsersUserListPage';
 import SuperUsersTutorListPage from './pages/SuperUsersTutorListPage';
 import SuperUsersTuteeListPage from './pages/SuperUsersTuteeListPage';
 import AddEditUserPage from './pages/AddEditUserPage';
+import AddEditTutorPage from './pages/AddEditTutorPage';
+import AddEditTuteePage from './pages/AddEditTuteePage';
 
 // ----------------------------------------------------------------------
 
@@ -40,6 +42,15 @@ export default function Router() {
         { path: 'tutors', element: <SuperUsersTutorListPage /> },
         { path: 'tutees', element: <SuperUsersTuteeListPage /> },
         { path: 'users/addedit', element: <AddEditUserPage /> },
+      ],
+    },
+    {
+      path: '/user',
+      element: <DashboardLayout />,
+      children: [
+        { element: <Navigate to="/dashboard/app" />, index: true },
+        { path: 'tutors/addedit', element: <AddEditTutorPage /> },
+        { path: 'tutees/addedit', element: <AddEditTuteePage /> },
       ],
     },
     {
