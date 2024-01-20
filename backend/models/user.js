@@ -35,7 +35,7 @@ User.init(
     superUserId: {
       type: DataTypes.INTEGER,
       allowNull: true,
-      references: { model: "super_user", key: "id" },
+      references: { model: "super_users", key: "id" },
     },
   },
   {

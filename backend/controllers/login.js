@@ -19,10 +19,12 @@ router.post('/', async (req, res) => {
     }
     const userForToken = {
         username: user.username,
-        id: user.id
+        id: user.id,
+        superUserId: user.superUserId
     }
     const token = jwt.sign(userForToken, process.env.SECRET, { expiresIn: 60*60*24 })
-    res.status(200).send({ token, username: user.username, name: user.name, id: user.id })
+    console.log( "testing.........")
+    res.status(200).send({token, test:0, username: user.username, name: user.name, id: user.id, superUserId: user.superUserId })
 })
 
 // login API for a Super-User

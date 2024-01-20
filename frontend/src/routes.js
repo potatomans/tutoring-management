@@ -13,6 +13,7 @@ import LandingPage from './pages/LandingPage';
 import SuperUsersUserListPage from './pages/SuperUsersUserListPage';
 import SuperUsersTutorListPage from './pages/SuperUsersTutorListPage';
 import SuperUsersTuteeListPage from './pages/SuperUsersTuteeListPage';
+import AddEditUserPage from './pages/AddEditUserPage';
 
 // ----------------------------------------------------------------------
 
@@ -38,6 +39,7 @@ export default function Router() {
         { path: 'users', element: <SuperUsersUserListPage /> },
         { path: 'tutors', element: <SuperUsersTutorListPage /> },
         { path: 'tutees', element: <SuperUsersTuteeListPage /> },
+        { path: 'users/addedit', element: <AddEditUserPage /> },
       ],
     },
     {

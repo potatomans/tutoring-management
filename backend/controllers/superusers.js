@@ -83,6 +83,7 @@ router.get("/user/:id", tokenExtractor, checkIfSuperUser, async (req, res) => {
   const userForToken = {
     username: user.username,
     id: user.id,
+    superUserId: user.superUserId
   };
   const token = jwt.sign(userForToken, process.env.SECRET, {
     expiresIn: 60 * 60 * 24,
