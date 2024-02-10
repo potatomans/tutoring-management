@@ -38,3 +38,11 @@ export const createPairing = async (pairing) => {
     const res = await axios.post(baseUrl, pairing)
     return res.data
 }
+
+export const checkPairingExist = async (tutee, tutor) => {
+    const res = await axios.get(`${baseUrl}?tutee=${tutee}&tutor=${tutor}`, config)
+    if (res.data.length === 0) {
+        return false
+    }
+    return true
+}
