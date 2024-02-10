@@ -92,7 +92,7 @@ const SuperUsersUserListPage = () => {
           </Button>
         </Stack>
         <Typography variant="h4" sx={{ mb: 5 }}>
-          USER (Volunteer Manager) LIST
+          USER (Partner) LIST
         </Typography>
         <Card>
           <Scrollbar>

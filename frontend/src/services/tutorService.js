@@ -1,6 +1,6 @@
 import axios from 'axios'
 
-const baseUrl = '/api/tutors'
+const baseUrl = `${process.env.REACT_APP_URL}/api/tutors`;
 
 let token = null
 

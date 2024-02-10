@@ -62,7 +62,7 @@ const AddEditUserPage = () => {
       setEmail('')
       setUsername('')
       setPassword('')
-    }catch (error){
+    } catch (error){
       alert('Error! User not added!')
       console.log(error)
     }
@@ -76,7 +76,7 @@ const AddEditUserPage = () => {
 
       <StyledRoot>
         <Typography variant="h4" sx={{ px: 4, m: 1, mr: 5 }}>
-          Add New User (Volunteer Manager)
+          Add New User (Partner)
         </Typography>
         <form onSubmit={handleSubmit}>
           <Stack spacing={0.2}>

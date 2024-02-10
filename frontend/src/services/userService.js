@@ -1,12 +1,14 @@
 import axios from 'axios'
 import { localTesting } from './serviceConstants';
 
-let baseUrl;
-if (localTesting) {
-  baseUrl = 'http://localhost:3001/api/users';
-} else {
-  baseUrl = '/api/users';
-}
+// let baseUrl;
+// if (localTesting) {
+//   baseUrl = 'http://localhost:3001/api/users';
+// } else {
+//   baseUrl = '/api/users';
+// }
+
+const baseUrl = `${process.env.REACT_APP_URL}/api/users`
 
 let token = null
 
