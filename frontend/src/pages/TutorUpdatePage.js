@@ -8,7 +8,7 @@ import { Dayjs } from 'dayjs';
 // hooks
 import useResponsive from '../hooks/useResponsive';
 // services
-import { createPairing, getPairingId, setPairingToken } from '../services/pairingService';
+import { checkPairingExist, createPairing, getPairingId, setPairingToken } from '../services/pairingService';
 import { createTutee } from '../services/tuteeService';
 import { createTutor } from '../services/tutorService';
 import { getUserId, setUserToken } from '../services/userService';
@@ -75,10 +75,13 @@ export default function TutorUpdatePage() {
 
     const [error, setError] = useState(null)
 
+    const [disabled, setDisabled] = useState(false)
+
     const mdUp = useResponsive('up', 'md');
 
     const handleFirstSubmit = async (e) => {
         e.preventDefault()
+        setDisabled(true)
         // post to /api/tutees, /api/tutors, /api/pairings. NOTE: should post to /api/subjectpairings too, but that is on the admin side
         try {
             setUserToken(process.env.REACT_APP_SEARCH_TOKEN)
@@ -128,10 +131,12 @@ export default function TutorUpdatePage() {
             setError(error.message)
             setTimeout(() => setError(null), 2000)
         }
+        setDisabled(false)
     }
 
     const handleSubmit = async (e) => {
         e.preventDefault()
+        setDisabled(true)
         try {
             // NOTE: i have yet to solve the problem of tutors/tutees with similar names. it will be a problem as getPairingId returns an array with more than one element!
             // post to /api/sessions
@@ -159,6 +164,7 @@ export default function TutorUpdatePage() {
             setError(error.message)
             setTimeout(() => setError(null), 2000)
         }
+        setDisabled(false)
     }
     return (
         <>
@@ -215,14 +221,14 @@ export default function TutorUpdatePage() {
                     </FormControl>
                     <Stack spacing={0.5}>
                         <StyledField required value={overview} onChange={({ target }) => setOverview(target.value)} name="overview" label="How did the session go?" multiline />    
-                    </Stack>  
+                    </Stack>
                     <Stack spacing={0.5}>
                         <StyledField value={problems} onChange={({ target }) => setProblems(target.value)} name="problems" label="Any problems faced?" multiline />    
                     </Stack>                
                     <Stack spacing={0.5}>
                         <StyledField value={nextSession} onChange={({ target }) => setNextSession(target.value)} name="next_session" label="What will you cover for the next session?" multiline />    
                     </Stack> 
-                    <Button type='submit' variant='contained' sx={{ ml: 1 }}>Submit</Button>
+                    <Button type='submit' variant='contained' sx={{ ml: 1 }} disabled={disabled}>Submit</Button>
                 </form>
             </StyledRoot>
         </>
