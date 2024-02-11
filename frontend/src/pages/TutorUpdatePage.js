@@ -8,17 +8,17 @@ import { Dayjs } from 'dayjs';
 // hooks
 import useResponsive from '../hooks/useResponsive';
 // services
-import { checkPairingExist, createPairing, getPairingId, setPairingToken } from '../services/pairingService';
+import { checkPairingExist, createPairing, getPairingId } from '../services/pairingService';
 import { createTutee } from '../services/tuteeService';
 import { createTutor } from '../services/tutorService';
 import { getUserId, setUserToken } from '../services/userService';
 import { createSession } from '../services/sessionService';
 import { createSubjectPairing } from '../services/subjectpairingService';
+import { setAxiosHeaders, removeAxiosHeaders } from '../services/serviceConstants';
 
 // components
 import Logo from '../components/logo';
 import Iconify from '../components/iconify';
-
 
 // ----------------------------------------------------------------------
 
@@ -84,8 +84,9 @@ export default function TutorUpdatePage() {
         setDisabled(true)
         // post to /api/tutees, /api/tutors, /api/pairings. NOTE: should post to /api/subjectpairings too, but that is on the admin side
         try {
-            setUserToken(process.env.REACT_APP_SEARCH_TOKEN)
-            setPairingToken(process.env.REACT_APP_SEARCH_TOKEN)
+            // setUserToken(process.env.REACT_APP_SEARCH_TOKEN)
+            // setPairingToken(process.env.REACT_APP_SEARCH_TOKEN) // TODO: refactor function
+            setAxiosHeaders(process.env.REACT_APP_SEARCH_TOKEN)
             const pairingExist = await checkPairingExist(tutee, tutor)
             if (pairingExist) {
                 throw new Error ("Pairing already exists in database.")
@@ -115,6 +116,7 @@ export default function TutorUpdatePage() {
             await createSession(session)
             await createSubjectPairing(pairingId)
 
+            removeAxiosHeaders()
             setManager('')
             setStrengths('')
             setWeaknesses('')
@@ -140,7 +142,8 @@ export default function TutorUpdatePage() {
         try {
             // NOTE: i have yet to solve the problem of tutors/tutees with similar names. it will be a problem as getPairingId returns an array with more than one element!
             // post to /api/sessions
-            setPairingToken(process.env.REACT_APP_SEARCH_TOKEN)
+            // setPairingToken(process.env.REACT_APP_SEARCH_TOKEN)
+            setAxiosHeaders(process.env.REACT_APP_SEARCH_TOKEN)
             const pairingId = await getPairingId(tutee, tutor)
             const session = {
                 pairingId,
@@ -151,6 +154,7 @@ export default function TutorUpdatePage() {
                 nextSession: nextSession || 'TBC'
             }
             await createSession(session)
+            removeAxiosHeaders()
             setTutor('')
             setTutee('')
             setDate('')

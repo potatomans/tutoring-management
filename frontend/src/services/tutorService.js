@@ -2,17 +2,17 @@ import axios from 'axios'
 
 const baseUrl = `${process.env.REACT_APP_URL}/api/tutors`;
 
-let token = null
+// let config = null
 
-export const setTutorToken = newToken => {
-  token = `Bearer ${newToken}`
-}
+// export const setTutorToken = newToken => {
+//     const token = `Bearer ${newToken}`
+//     config = {
+//         headers: { Authorization: token },
+//     }
+// }
 
 export const getTutorId = async (name) => {
-    const config = {
-        headers: { Authorization: token },
-    }
-    const res = await axios.get(`${baseUrl}?name=${name}`, config)
+    const res = await axios.get(`${baseUrl}?name=${name}`)
     return Number(res.data[0].id)
 }
 

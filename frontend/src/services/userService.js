@@ -1,6 +1,5 @@
 import axios from 'axios'
-import { localTesting } from './serviceConstants';
-
+// import { localTesting } from './serviceConstants';
 // let baseUrl;
 // if (localTesting) {
 //   baseUrl = 'http://localhost:3001/api/users';
@@ -10,25 +9,22 @@ import { localTesting } from './serviceConstants';
 
 const baseUrl = `${process.env.REACT_APP_URL}/api/users`
 
-let token = null
+// let config = null
 
-export const setUserToken = newToken => {
-  token = `Bearer ${newToken}`
-}
+// export const setUserToken = newToken => {
+//     const token = `Bearer ${newToken}`
+//     config = {
+//         headers: { Authorization: token },
+//     }
+// }
 
 export const getAllUsers = async () => {
-    const config = {
-        headers: { Authorization: token },
-    }
-    const res = await axios.get(baseUrl, config)
+    const res = await axios.get(baseUrl)
     return res.data
 }
 
 export const getUserId = async (username) => {
-    const config = {
-        headers: { Authorization: token },
-    }
-    const res = await axios.get(`${baseUrl}?username=${username}`, config)
+    const res = await axios.get(`${baseUrl}?username=${username}`)
     if (res.data.length === 0) {
         throw new Error('Volunteer manager does not exist')
     }
@@ -36,17 +32,11 @@ export const getUserId = async (username) => {
 }
 
 export const createNewTutor = async (tutorObj) => {
-  const config = {
-    headers: { Authorization: token },
-  };
-  const res = await axios.post(`${baseUrl}/tutor`, tutorObj, config);
-  return res;
+    const res = await axios.post(`${baseUrl}/tutor`, tutorObj);
+    return res;
 };
 
 export const createNewTutee = async (tuteeObj) => {
-  const config = {
-    headers: { Authorization: token },
-  };
-  const res = await axios.post(`${baseUrl}/tutee`, tuteeObj, config);
-  return res;
+    const res = await axios.post(`${baseUrl}/tutee`, tuteeObj);
+    return res;
 };

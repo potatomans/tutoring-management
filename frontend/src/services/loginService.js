@@ -1,7 +1,5 @@
 import axios from 'axios'
-import {localTesting} from './serviceConstants'
-
-console.log("url", process.env.REACT_APP_URL)
+// import {localTesting} from './serviceConstants'
 
 const baseUrl = `${process.env.REACT_APP_URL}/api/login`;
 // if (localTesting){

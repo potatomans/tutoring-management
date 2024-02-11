@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { localTesting } from './serviceConstants';
+// import { localTesting } from './serviceConstants';
 
 // let baseUrl;
 // if (localTesting) {
@@ -10,52 +10,36 @@ import { localTesting } from './serviceConstants';
 
 const baseUrl = `${process.env.REACT_APP_URL}/api/superUser`;
 
-let token = null;
+// let config = null;
 
-const config = {
-  headers: { Authorization: token },
-};
-
-export const setSuperUserToken = (newToken) => {
-  token = `Bearer ${newToken}`;
-};
+// export const setSuperUserToken = (newToken) => {
+//     const token = `Bearer ${newToken}`;
+//     config = {
+//       headers: { Authorization: token },
+//     };
+// };
 
 export const getAllSuperUserUsers = async () => {
-  // const config = {
-  //   headers: { Authorization: token },
-  // };
-  const res = await axios.get(`${baseUrl}/users`, config);
+  const res = await axios.get(`${baseUrl}/users`);
   return res.data;
 };
 
 export const getAllSuperUserTutors = async () => {
-  // const config = {
-  //   headers: { Authorization: token },
-  // };
-  const res = await axios.get(`${baseUrl}/tutors`, config);
+  const res = await axios.get(`${baseUrl}/tutors`);
   return res.data;
 };
 
 export const getAllSuperUserTutees = async () => {
-  // const config = {
-  //   headers: { Authorization: token },
-  // };
-  const res = await axios.get(`${baseUrl}/tutees`, config);
+  const res = await axios.get(`${baseUrl}/tutees`);
   return res.data;
 };
 
 export const getUserToken = async (id) =>{
-  // const config = {
-  //   headers: { Authorization: token}
-  // }
-  const res = await axios.get(`${baseUrl}/user/${id}`, config)
+  const res = await axios.get(`${baseUrl}/user/${id}`)
   return res.data
 }
 
 export const createNewUser = async (userObj) => {
-  // const config = {
-  //   headers: { Authorization: token },
-  // };
-  const res = await axios.post(`${baseUrl}/users`, userObj, config)
-  return res
+  const res = await axios.post(`${baseUrl}/users`, userObj)
+  return res.data
 }

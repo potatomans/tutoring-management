@@ -17,7 +17,7 @@ import {
 } from '@mui/material';
 
 // services
-import { getAllSuperUserTutors, setSuperUserToken } from '../services/superUserService';
+import { getAllSuperUserTutors } from '../services/superUserService';
 
 // components
 import SuperUserContext from '../SuperUserContext';
@@ -39,7 +39,7 @@ const SuperUsersTutorListPage = () => {
     const parsedSuperUser = JSON.parse(loggedSuperUserJSON);
     if (loggedSuperUserJSON) {
       setSuperUser(parsedSuperUser);
-      setSuperUserToken(parsedSuperUser.superUserToken);
+      // setSuperUserToken(parsedSuperUser.superUserToken);
       initPage(superUser);
     } else if (!superUser && !parsedSuperUser) {
       alert('No logged in S-User');

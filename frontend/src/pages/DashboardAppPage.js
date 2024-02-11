@@ -29,11 +29,10 @@ import {
 } from '@mui/material';
 
 // services
-import { getAllPairings, getMasterPairings, setPairingToken } from '../services/pairingService';
-import { getAllTutees, setTuteeToken } from '../services/tuteeService';
-import { setSessionToken } from '../services/sessionService';
-import { setTutorToken } from '../services/tutorService';
-import { setUserToken } from '../services/userService';
+import { getAllPairings, getMasterPairings, } from '../services/pairingService';
+import { getAllTutees } from '../services/tuteeService';
+import { setAxiosHeaders } from '../services/serviceConstants';
+// import { setSessionToken } from '../services/sessionService';
 
 // components
 import Label from '../components/label';
@@ -120,15 +119,16 @@ export default function DashboardAppPage() {
   const navigate = useNavigate()
 
   useEffect(() => {
-    const loggedUserJSON = window.localStorage.getItem('loggedUser')
+    const loggedUserJSON = window.localStorage.getItem('loggedUser') // TODO: abstract this away into separate file
     const parsedUser = JSON.parse(loggedUserJSON)
     if (loggedUserJSON) {
       setUser(parsedUser)
-      setPairingToken(parsedUser.token)
-      setSessionToken(parsedUser.token)
-      setTutorToken(parsedUser.token)
-      setTuteeToken(parsedUser.token)
-      setUserToken(parsedUser.token)
+      setAxiosHeaders()
+      // setPairingToken(parsedUser.token)
+      // setSessionToken(parsedUser.token)
+      // setTutorToken(parsedUser.token)
+      // setTuteeToken(parsedUser.token)
+      // setUserToken(parsedUser.token)
       initDashboard(parsedUser)
     } else if (!user && !parsedUser) {
       navigate('/login')

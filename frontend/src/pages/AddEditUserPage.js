@@ -11,7 +11,7 @@ import {
 } from '@mui/material';
 import SuperUserContext from '../SuperUserContext';
 // services
-import {setSuperUserToken, createNewUser} from '../services/superUserService'
+import {createNewUser} from '../services/superUserService'
 // ----------------------------------------------------------------------
 
 const StyledRoot = styled('div')(({ theme }) => ({
@@ -50,7 +50,7 @@ const AddEditUserPage = () => {
   
   const handleSubmit = async (e) => {
     e.preventDefault()
-    setSuperUserToken(superUser.superUserToken)
+    // setSuperUserToken(superUser.superUserToken)
     try{
       const userObj = {
         email, name, username, password

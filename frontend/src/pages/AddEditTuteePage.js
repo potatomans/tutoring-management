@@ -11,7 +11,7 @@ import dayjs from 'dayjs';
 import SuperUserContext from '../SuperUserContext';
 import userContext from '../UserContext';
 // services
-import { setUserToken, createNewTutee } from '../services/userService';
+import { createNewTutee } from '../services/userService';
 // ----------------------------------------------------------------------
 
 const StyledRoot = styled('div')(({ theme }) => ({
@@ -46,7 +46,7 @@ const AddEditTuteePage = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setUserToken(user.token);
+    // setUserToken(user.token);
     try {
       const tuteeObj = {
         name,

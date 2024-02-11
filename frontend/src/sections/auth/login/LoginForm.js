@@ -9,11 +9,12 @@ import SuperUserContext from '../../../SuperUserContext';
 import Iconify from '../../../components/iconify';
 // services
 import { login, superUserLogin } from '../../../services/loginService'
-import { setPairingToken } from '../../../services/pairingService';
+// import { setPairingToken } from '../../../services/pairingService';
 import { setSessionToken } from '../../../services/sessionService';
 import { setTutorToken } from '../../../services/tutorService';
 import { setTuteeToken } from '../../../services/tuteeService';
 import { setUserToken } from '../../../services/userService';
+import { setAxiosHeaders } from '../../../services/serviceConstants';
 
 // ----------------------------------------------------------------------
 
@@ -34,14 +35,15 @@ export default function LoginForm() {
     // post it to /api/login, then render accordingly.
     try {
         const user = await login({ username, password })
-        window.localStorage.setItem(
+        localStorage.setItem(
           'loggedUser', JSON.stringify(user)
-        ) 
-        setPairingToken(user.token)
-        setSessionToken(user.token)
-        setTutorToken(user.token)
-        setTuteeToken(user.token)
-        setUserToken(user.token)
+        )
+        // setPairingToken(user.token)
+        setAxiosHeaders()
+        // setSessionToken(user.token)
+        // setTutorToken(user.token)
+        // setTuteeToken(user.token)
+        // setUserToken(user.token)
         setUser(user)
         setUsername('')
         setPassword('')
@@ -60,7 +62,7 @@ export default function LoginForm() {
         )
         setSuperUser(superUser)
         navigate('/superuser/users')
-    }catch (exception){
+    } catch (exception){
         setNotif('Incorrect SuperUser Credentials')
         setTimeout(()=>setNotif(null), 5000)
     }

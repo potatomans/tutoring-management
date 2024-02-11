@@ -17,7 +17,7 @@ import {
 } from '@mui/material';
 
 // services
-import {getAllSuperUserUsers, setSuperUserToken, getUserToken} from '../services/superUserService'
+import {getAllSuperUserUsers, getUserToken} from '../services/superUserService'
 
 // components
 import SuperUserContext from '../SuperUserContext';
@@ -40,9 +40,9 @@ const SuperUsersUserListPage = () => {
   useEffect(()=>{
     const loggedSuperUserJSON = window.localStorage.getItem('loggedSuperUser')
     const parsedSuperUser = JSON.parse(loggedSuperUserJSON)
-    if (loggedSuperUserJSON){
+    if (loggedSuperUserJSON) {
       setSuperUser(parsedSuperUser)
-      setSuperUserToken(parsedSuperUser.superUserToken)
+      // setSuperUserToken(parsedSuperUser.superUserToken)
       initPage(superUser)
     } else if (!superUser && !parsedSuperUser){
       alert('No logged in S-User')

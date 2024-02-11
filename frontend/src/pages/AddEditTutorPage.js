@@ -11,7 +11,7 @@ import dayjs from 'dayjs';
 import SuperUserContext from '../SuperUserContext';
 import userContext from '../UserContext';
 // services
-import { setUserToken, createNewTutor } from '../services/userService';
+import { createNewTutor } from '../services/userService';
 // ----------------------------------------------------------------------
 
 const StyledRoot = styled('div')(({ theme }) => ({
@@ -47,7 +47,7 @@ const AddEditTutorPage = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setUserToken(user.token);
+    // setUserToken(user.token);
     try {
       const tutorObj = {
         name,
