@@ -31,7 +31,7 @@ router.get("/tutors", tokenExtractor, async (req, res) => {
   try{
     const tutors = await Tutor.findAll({
       where: {
-        id: req.decodedToken.id
+        superUserId: req.decodedToken.id
       }
     })
     res.json(tutors);
@@ -46,7 +46,7 @@ router.get("/tutees", tokenExtractor, async (req, res) => {
   try{
     const tutees = await Tutee.findAll({
       where: {
-        id: req.decodedToken.id
+        superUserId: req.decodedToken.id
       }
     })
     res.json(tutees);
@@ -76,7 +76,7 @@ router.get("/users", tokenExtractor, async (req, res) => {
 router.get("/user/:id", tokenExtractor, checkIfSuperUser, async (req, res) => {
   const user = await User.findByPk(req.params.id);
   console.log(user), console.log(req.decodedToken);
-  if (user.id != req.decodedToken.id){
+  if (user.superUserId != req.decodedToken.id){
     res.status(401).json({
       error: "Unauthorized access of a user"
     })
