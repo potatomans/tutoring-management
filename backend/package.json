@@ -5,6 +5,7 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "dev": "nodemon index.js",
+    "migration:up": "node util/runmigration.js",
     "migration:down": "node util/rollback.js",
     "start": "node index.js"
   },

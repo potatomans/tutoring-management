@@ -15,7 +15,7 @@ import axios from "axios"
 export const getToken = () => {
     const localStorageUser = JSON.parse(localStorage.getItem("loggedUser"))
     if (localStorageUser) {
-        return localStorageUser.token  
+        return localStorageUser.token
     }
     return null
 }

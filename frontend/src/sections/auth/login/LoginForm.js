@@ -9,11 +9,6 @@ import SuperUserContext from '../../../SuperUserContext';
 import Iconify from '../../../components/iconify';
 // services
 import { login, superUserLogin } from '../../../services/loginService'
-// import { setPairingToken } from '../../../services/pairingService';
-import { setSessionToken } from '../../../services/sessionService';
-import { setTutorToken } from '../../../services/tutorService';
-import { setTuteeToken } from '../../../services/tuteeService';
-import { setUserToken } from '../../../services/userService';
 import { setAxiosHeaders } from '../../../services/serviceConstants';
 
 // ----------------------------------------------------------------------
@@ -26,7 +21,7 @@ export default function LoginForm() {
 
   const [isSuperUser, setIsSuperUser] = useState(false)
   const [username, setUsername] = useState('');
-  const [superUserEmail, setSuperUserEmail] = useState('');
+  const [superUserName, setSuperUserName] = useState('');
   const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
   const [notif, setNotif] = useState(null);
@@ -54,12 +49,13 @@ export default function LoginForm() {
     }
   };
 
-  const handleSuperUseClick = async () => {
+  const handleSuperUserClick = async () => {
     try {
-        const superUser = await superUserLogin({email:superUserEmail, password})
-        window.localStorage.setItem(
-          'loggedSuperUser', JSON.stringify(superUser)
+        const superUser = await superUserLogin({name:superUserName, password})
+        localStorage.setItem(
+          'loggedUser', JSON.stringify(superUser)
         )
+        setAxiosHeaders()
         setSuperUser(superUser)
         navigate('/superuser/users')
     } catch (exception){
@@ -82,10 +78,10 @@ export default function LoginForm() {
       <Stack spacing={3}>
         {isSuperUser ? (
           <TextField
-            name="superUserEmail"
-            label="Super-User Email ID"
-            value={superUserEmail}
-            onChange={({ target }) => setSuperUserEmail(target.value)}
+            name="superUserName"
+            label="Super-User Username"
+            value={superUserName}
+            onChange={({ target }) => setSuperUserName(target.value)}
           />
         ) : (
           <TextField
@@ -130,7 +126,7 @@ export default function LoginForm() {
         size="large"
         type="submit"
         variant="contained"
-        onClick={isSuperUser ? handleSuperUseClick : handleClick}
+        onClick={isSuperUser ? handleSuperUserClick : handleClick}
       >
         Login
       </LoadingButton>

@@ -35,7 +35,7 @@ const SuperUsersTutorListPage = () => {
   const [tutorList, setTutorList] = useState([]);
   const navigate = useNavigate();
   useEffect(() => {
-    const loggedSuperUserJSON = window.localStorage.getItem('loggedSuperUser');
+    const loggedSuperUserJSON = window.localStorage.getItem('loggedUser');
     const parsedSuperUser = JSON.parse(loggedSuperUserJSON);
     if (loggedSuperUserJSON) {
       setSuperUser(parsedSuperUser);

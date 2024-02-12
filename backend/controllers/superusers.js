@@ -29,11 +29,11 @@ router.post("/", async (req, res) => {
 // Get details of all tutors under a super-user
 router.get("/tutors", tokenExtractor, async (req, res) => {
   try{
-    const tutors = await Tutor.findAll(
-      { where: {
-        superUserId: req.decodedToken.id
-      }}
-      )
+    const tutors = await Tutor.findAll({
+      where: {
+        id: req.decodedToken.id
+      }
+    })
     res.json(tutors);
   }catch(error){
     console.log(error)
@@ -44,11 +44,11 @@ router.get("/tutors", tokenExtractor, async (req, res) => {
 // Get details of all tutees under a super-user
 router.get("/tutees", tokenExtractor, async (req, res) => {
   try{
-    const tutees = await Tutee.findAll(
-      { where: {
-        superUserId: req.decodedToken.id
-      }}
-      )
+    const tutees = await Tutee.findAll({
+      where: {
+        id: req.decodedToken.id
+      }
+    })
     res.json(tutees);
   }catch(error){
     console.log(error)
@@ -59,11 +59,12 @@ router.get("/tutees", tokenExtractor, async (req, res) => {
 // Get details of all user under a super-user
 router.get("/users", tokenExtractor, async (req, res) => {
   try{
-    const users = await User.findAll(
-      { where: {
+    console.log("superuserId", req.decodedToken.id)
+    const users = await User.findAll({
+      where: {
         superUserId: req.decodedToken.id
-      }}
-      )
+      }
+    })
     res.json(users);
   }catch(error){
     console.log(error)
@@ -75,7 +76,7 @@ router.get("/users", tokenExtractor, async (req, res) => {
 router.get("/user/:id", tokenExtractor, checkIfSuperUser, async (req, res) => {
   const user = await User.findByPk(req.params.id);
   console.log(user), console.log(req.decodedToken);
-  if (user.superUserId != req.decodedToken.id){
+  if (user.id != req.decodedToken.id){
     res.status(401).json({
       error: "Unauthorized access of a user"
     })

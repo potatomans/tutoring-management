@@ -29,12 +29,11 @@ router.post('/', async (req, res) => {
 
 // login API for a Super-User
 router.post('/superUser', async (req,res)=>{
-    const {email, password} = req.body
+    const { name, password } = req.body
     const superUser = await SuperUser.findOne({
-        where:{
-            email: email
-        }
+        where: { name }
     })
+    // console.log("superuser", superUser)
     const passwordCorrect = (superUser != null) && (await bcrypt.compare(password, superUser.password))
     if (!(superUser && passwordCorrect)){
         res.status(401).json({
@@ -47,10 +46,11 @@ router.post('/superUser', async (req,res)=>{
         name: superUser.name,
         userType: "superUser"
     }
-    const superUserToken = jwt.sign(superUserForToken, process.env.SECRET, {expiresIn: 3600*24})
+    const token = jwt.sign(superUserForToken, process.env.SECRET, {expiresIn: 3600*24})
     res.status(200).json({
-        superUserToken, email,
-        name: superUser.name,
+        token, 
+        email: superUser.email,
+        name,
         id: superUser.id,
         userType: 'superUser' 
     })
@@ -58,33 +58,33 @@ router.post('/superUser', async (req,res)=>{
 })
 
 // login API for a Super-User
-router.post('/superUser', async (req,res)=>{
-    const {email, password} = req.body
-    const superUser = await SuperUser.findOne({
-        where:{
-            email: email
-        }
-    })
-    const passwordCorrect = (superUser != null) && (await bcrypt.compare(password, superUser.password))
-    if (!(superUser && passwordCorrect)){
-        res.status(401).json({
-            error: 'Invalid Username or Password'
-        })
-    }
-    const superUserForToken = {
-        email: superUser.email,
-        id: superUser.id,
-        name: superUser.name,
-        userType: "superUser"
-    }
-    const superUserToken = jwt.sign(superUserForToken, process.env.SECRET, {expiresIn: 3600*24})
-    res.status(200).json({
-        superUserToken, email,
-        name: superUser.name,
-        id: superUser.id,
-        userType: 'superUser' 
-    })
+// router.post('/superUser', async (req,res)=>{
+//     const {email, password} = req.body
+//     const superUser = await SuperUser.findOne({
+//         where:{
+//             email: email
+//         }
+//     })
+//     const passwordCorrect = (superUser != null) && (await bcrypt.compare(password, superUser.password))
+//     if (!(superUser && passwordCorrect)){
+//         res.status(401).json({
+//             error: 'Invalid Username or Password'
+//         })
+//     }
+//     const superUserForToken = {
+//         email: superUser.email,
+//         id: superUser.id,
+//         name: superUser.name,
+//         userType: "superUser"
+//     }
+//     const superUserToken = jwt.sign(superUserForToken, process.env.SECRET, {expiresIn: 3600*24})
+//     res.status(200).json({
+//         superUserToken, email,
+//         name: superUser.name,
+//         id: superUser.id,
+//         userType: 'superUser' 
+//     })
 
-})
+// })
 
 module.exports = router

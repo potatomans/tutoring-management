@@ -38,7 +38,7 @@ const AddEditUserPage = () => {
 
   useEffect(()=>{
     if (!superUser){
-      const loggedSuperUserJSON = window.localStorage.getItem('loggedSuperUser')
+      const loggedSuperUserJSON = window.localStorage.getItem('loggedUser')
       const parsedSuperUser = JSON.parse(loggedSuperUserJSON)
     if (loggedSuperUserJSON){
       setSuperUser(parsedSuperUser)
@@ -56,7 +56,6 @@ const AddEditUserPage = () => {
         email, name, username, password
       }
       const res = await createNewUser(userObj)
-      if (!(res.status === 201)) throw Error
       alert('User Added')
       setName('')
       setEmail('')

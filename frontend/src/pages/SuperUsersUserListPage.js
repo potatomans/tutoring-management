@@ -18,6 +18,7 @@ import {
 
 // services
 import {getAllSuperUserUsers, getUserToken} from '../services/superUserService'
+import { getToken } from "../services/serviceConstants";
 
 // components
 import SuperUserContext from '../SuperUserContext';
@@ -38,7 +39,7 @@ const SuperUsersUserListPage = () => {
   const navigate = useNavigate()
 
   useEffect(()=>{
-    const loggedSuperUserJSON = window.localStorage.getItem('loggedSuperUser')
+    const loggedSuperUserJSON = localStorage.getItem('loggedUser')
     const parsedSuperUser = JSON.parse(loggedSuperUserJSON)
     if (loggedSuperUserJSON) {
       setSuperUser(parsedSuperUser)
@@ -47,7 +48,7 @@ const SuperUsersUserListPage = () => {
     } else if (!superUser && !parsedSuperUser){
       alert('No logged in S-User')
       navigate('/login')
-    }else {
+    } else {
       initPage(superUser)
     }
   },[])
@@ -66,7 +67,7 @@ const SuperUsersUserListPage = () => {
 
   const handleAssumeUserRole = (id) => {
     getUserToken(id).then((data)=>{
-      window.localStorage.setItem(
+      localStorage.setItem(
         'loggedUser',JSON.stringify(data)
       )
       navigate('/dashboard/app')
