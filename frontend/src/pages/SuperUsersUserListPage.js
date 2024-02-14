@@ -18,7 +18,6 @@ import {
 
 // services
 import {getAllSuperUserUsers, getUserToken} from '../services/superUserService'
-import { getToken } from "../services/serviceConstants";
 
 // components
 import SuperUserContext from '../SuperUserContext';
@@ -29,7 +28,6 @@ import GenericTableHead from "../components/generic-table-head/index";
 const TABLE_HEAD = [
   { id: 'name', label: 'Name', alignRight: false },
   { id: 'email', label: 'Email', alignRight: false },
-  { id: '' },
 ];
 
 
@@ -49,11 +47,11 @@ const SuperUsersUserListPage = () => {
       alert('No logged in S-User')
       navigate('/login')
     } else {
-      initPage(superUser)
+      initPage()
     }
   },[])
 
-  const initPage = (superUser) => {
+  const initPage = () => {
     getAllSuperUserUsers().then((data)=>{
       setUserList(data)
     }).catch((err)=>{
@@ -79,7 +77,7 @@ const SuperUsersUserListPage = () => {
   return (
     <>
       <Helmet>
-        <title>SU Users-List</title>
+        <title>Partners Dashboard</title>
       </Helmet>
       {/* <p>{JSON.stringify(superUser)}</p>
       <p>{JSON.stringify(userList)}</p> */}
@@ -89,11 +87,11 @@ const SuperUsersUserListPage = () => {
             Hi {superUser.name}
           </Typography>
           <Button variant="contained" startIcon={<Iconify icon="eva:plus-fill" />} onClick={handleNewUser}>
-            Add User
+            Add Partner
           </Button>
         </Stack>
         <Typography variant="h4" sx={{ mb: 5 }}>
-          USER (Partner) LIST
+          List of Partners
         </Typography>
         <Card>
           <Scrollbar>

@@ -12,6 +12,11 @@ const navConfig = [
     icon: icon('ic_user'),
   },
   {
+    title: 'Pairings',
+    path: '/superuser/pairings',
+    icon: icon('ic_user'),
+  },
+  {
     title: 'Tutors',
     path: '/superuser/tutors',
     icon: icon('ic_user'),

@@ -2,7 +2,7 @@ const jwt = require("jsonwebtoken");
 const bcrypt = require("bcrypt");
 const router = require("express").Router();
 
-const { SuperUser, User, Tutor, Tutee } = require("../models");
+const { SuperUser, User, Tutor, Tutee, Pairing } = require("../models");
 const { Op } = require("sequelize");
 const { tokenExtractor, checkIfSuperUser } = require("../authMiddleware");
 
@@ -25,6 +25,34 @@ router.post("/", async (req, res) => {
   }
 });
 
+// Get details of all pairings under a super-user
+router.get("/pairings", tokenExtractor, async (req, res) => {
+  try{
+    const pairings = await Pairing.findAll({
+      // where: {
+      //   superUserId: req.decodedToken.id
+      // }, // TODO: change the where because pairings doesnt have a superuserid column
+      include: [
+        {
+          model: User,
+          where: {
+            superUserId: req.decodedToken.id,
+          }
+        },
+        {
+          model: Tutor,
+        },
+        {
+          model: Tutee,
+        },
+      ]
+    })
+    res.json(pairings);
+  } catch(error) {
+    console.log(error)
+    res.status(500).json({error})
+  }
+});
 
 // Get details of all tutors under a super-user
 router.get("/tutors", tokenExtractor, async (req, res) => {
@@ -35,7 +63,7 @@ router.get("/tutors", tokenExtractor, async (req, res) => {
       }
     })
     res.json(tutors);
-  }catch(error){
+  } catch(error){
     console.log(error)
     res.status(500).json({error})
   }
@@ -59,14 +87,14 @@ router.get("/tutees", tokenExtractor, async (req, res) => {
 // Get details of all user under a super-user
 router.get("/users", tokenExtractor, async (req, res) => {
   try{
-    console.log("superuserId", req.decodedToken.id)
+    // console.log("superuserId", req.decodedToken.id)
     const users = await User.findAll({
       where: {
         superUserId: req.decodedToken.id
       }
     })
     res.json(users);
-  }catch(error){
+  } catch (error) {
     console.log(error)
     res.status(500).json({error})
   }
@@ -129,17 +157,16 @@ router.post("/users", tokenExtractor, checkIfSuperUser, async (req, res)=>{
   console.log("Adding new User")
   const { username, name, password, email, organisation } =
     req.body;
-  const superUserId = req.decodedToken.id
   const saltRounds = 10;
   const passwordHash = await bcrypt.hash(password, saltRounds);
-  console.log(req.decodedToken)
+  // console.log(req.decodedToken)
   const user = await User.create({
     username,
     name,
     password: passwordHash,
     email,
     organisation,
-    superUserId,
+    superUserId: req.decodedToken.id,
   });
   res.status(201).json(user);
 })

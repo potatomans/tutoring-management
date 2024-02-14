@@ -34,7 +34,7 @@ const AddEditTutorPage = () => {
 
   useEffect(() => {
     if (!user) {
-      const loggedUserJSON = window.localStorage.getItem('loggedUser');
+      const loggedUserJSON = localStorage.getItem('loggedUser');
       const parsedUser = JSON.parse(loggedUserJSON);
       if (loggedUserJSON) {
         setUser(parsedUser);

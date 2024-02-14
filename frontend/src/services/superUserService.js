@@ -24,6 +24,11 @@ export const getAllSuperUserUsers = async () => {
   return res.data;
 };
 
+export const getAllSuperUserPairings = async () => {
+  const res = await axios.get(`${baseUrl}/pairings`);
+  return res.data;
+};
+
 export const getAllSuperUserTutors = async () => {
   const res = await axios.get(`${baseUrl}/tutors`);
   return res.data;

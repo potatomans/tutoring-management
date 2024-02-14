@@ -17,7 +17,7 @@ import {
 } from '@mui/material';
 
 // services
-import { getAllSuperUserTutees } from '../services/superUserService';
+import { getAllSuperUserPairings } from '../services/superUserService';
 
 // components
 import SuperUserContext from '../SuperUserContext';
@@ -27,20 +27,23 @@ import GenericTableHead from '../components/generic-table-head/index';
 
 const TABLE_HEAD = [
   { id: 'id', label: 'ID', alignRight: false },
-  { id: 'name', label: 'name', alignRight: false },
+  { id: 'Point of Contact', label: 'Point of Contact', alignRight: false },
+  { id: 'Organisation', label: 'Organisation', alignRight: false },
+  { id: 'Tutor', label: 'Tutor', alignRight: false },
+  { id: 'Tutee', label: 'Tutee', alignRight: false },
 ];
 
-const SuperUsersTuteeListPage = () => {  
+const SuperUsersPairingListPage = () => {  
   const [superUser, setSuperUser] = useContext(SuperUserContext);
-  const [tuteeList, setTuteeList] = useState([]);
+  const [pairingList, setPairingList] = useState([]);
   const navigate = useNavigate();
   useEffect(() => {
-    const loggedSuperUserJSON = window.localStorage.getItem('loggedUser');
+    const loggedSuperUserJSON = localStorage.getItem('loggedUser');
     const parsedSuperUser = JSON.parse(loggedSuperUserJSON);
     if (loggedSuperUserJSON) {
       setSuperUser(parsedSuperUser);
       // setSuperUserToken(parsedSuperUser.superUserToken);
-      initPage(superUser);
+      initPage();
     } else if (!superUser && !parsedSuperUser) {
       alert('No logged in S-User');
       navigate('/login');
@@ -48,10 +51,10 @@ const SuperUsersTuteeListPage = () => {
       initPage(superUser);
     }
   }, []);
-  const initPage = (superUser) => {
-    getAllSuperUserTutees()
+  const initPage = () => {
+    getAllSuperUserPairings()
       .then((data) => {
-        setTuteeList(data);
+        setPairingList(data);
       })
       .catch((err) => {
         console.log(err);
@@ -60,11 +63,11 @@ const SuperUsersTuteeListPage = () => {
   return (
     <>
       <Helmet>
-        <title>Tutees Dashboard</title>
+        <title>Pairings Dashboard</title>
       </Helmet>
       <Container maxWidth="xl">
         <Typography variant="h4" sx={{ mb: 5 }}>
-          TUTEES LIST
+          Pairings List
         </Typography>
         <Card>
           <Scrollbar>
@@ -72,12 +75,16 @@ const SuperUsersTuteeListPage = () => {
               <Table>
                 <GenericTableHead headLabel={TABLE_HEAD} />
                 <TableBody>
-                  {tuteeList.map((tutee) => {
-                    const { id, name } = tutee;
+                  {pairingList.map((pairing) => {
+                    const { id, user, tutor, tutee } = pairing;
                     return (
                       <TableRow key={id}>
                         <TableCell align="left">{id}</TableCell>
-                        <TableCell align="left">{name}</TableCell>
+                        <TableCell align="left">{user.name}</TableCell>
+                        <TableCell align="left">{user.organisation}</TableCell>
+                        <TableCell align="left">{tutor.name}</TableCell>
+                        <TableCell align="left">{tutee.name}</TableCell>
+                        {/* <TableCell align="left">{name}</TableCell> */}
                       </TableRow>
                     );
                   })}
@@ -91,4 +98,4 @@ const SuperUsersTuteeListPage = () => {
   );
 };
 
-export default SuperUsersTuteeListPage;
+export default SuperUsersPairingListPage;
