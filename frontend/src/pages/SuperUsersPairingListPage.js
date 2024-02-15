@@ -18,6 +18,7 @@ import {
 
 // services
 import { getAllSuperUserPairings } from '../services/superUserService';
+import { setAxiosHeaders } from "../services/serviceConstants";
 
 // components
 import SuperUserContext from '../SuperUserContext';
@@ -41,6 +42,7 @@ const SuperUsersPairingListPage = () => {
     const loggedSuperUserJSON = localStorage.getItem('loggedUser');
     const parsedSuperUser = JSON.parse(loggedSuperUserJSON);
     if (loggedSuperUserJSON) {
+      setAxiosHeaders();
       setSuperUser(parsedSuperUser);
       // setSuperUserToken(parsedSuperUser.superUserToken);
       initPage();

@@ -66,15 +66,6 @@ export default function LoginForm() {
 
   return (
     <>
-      <Stack direction="row" alignItems="center" justifyContent="flex-start" sx={{ my: 2 }}>
-        <Checkbox
-          name="superUserLogin"
-          label="Super User Login"
-          onClick={() => setIsSuperUser(!isSuperUser)}
-          checked={isSuperUser}
-        />
-        SuperUser Login?
-      </Stack>
       <Stack spacing={3}>
         {isSuperUser ? (
           <TextField
@@ -110,9 +101,19 @@ export default function LoginForm() {
         />
       </Stack>
 
-      <Stack direction="row" alignItems="center" justifyContent="flex-start" sx={{ my: 2 }}>
+      {/* <Stack direction="row" alignItems="center" justifyContent="flex-start" sx={{ my: 2 }}>
         <Checkbox name="remember" label="Remember me" />
         Remember me
+      </Stack> */}
+
+      <Stack direction="row" alignItems="center" justifyContent="flex-start" sx={{ my: 2 }}>
+        <Checkbox
+          name="superUserLogin"
+          label="Super User Login"
+          onClick={() => setIsSuperUser(!isSuperUser)}
+          checked={isSuperUser}
+        />
+        SuperUser Login
       </Stack>
 
       {notif ? (

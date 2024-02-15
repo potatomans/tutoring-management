@@ -17,7 +17,8 @@ import {
 } from '@mui/material';
 
 // services
-import {getAllSuperUserUsers, getUserToken} from '../services/superUserService'
+import { getAllSuperUserUsers, getUserToken } from '../services/superUserService';
+import { setAxiosHeaders } from "../services/serviceConstants";
 
 // components
 import SuperUserContext from '../SuperUserContext';
@@ -40,6 +41,7 @@ const SuperUsersUserListPage = () => {
     const loggedSuperUserJSON = localStorage.getItem('loggedUser')
     const parsedSuperUser = JSON.parse(loggedSuperUserJSON)
     if (loggedSuperUserJSON) {
+      setAxiosHeaders()
       setSuperUser(parsedSuperUser)
       // setSuperUserToken(parsedSuperUser.superUserToken)
       initPage(superUser)
@@ -64,14 +66,18 @@ const SuperUsersUserListPage = () => {
   }
 
   const handleAssumeUserRole = (id) => {
-    getUserToken(id).then((data)=>{
-      localStorage.setItem(
-        'loggedUser',JSON.stringify(data)
-      )
-      navigate('/dashboard/app')
-    }).catch((err)=>{
-      console.log(err)
-    })
+    // getUserToken(id).then((data)=>{
+    //   localStorage.setItem(
+    //     'loggedUser',JSON.stringify(data)
+    //   )
+    //   navigate('/dashboard/app')
+    // }).catch((err)=>{
+    //   console.log(err)
+    // })
+    const currLoggedUser = JSON.parse(localStorage.getItem("loggedUser"));
+    const newLoggedUser = { ...currLoggedUser, assumeRole: id };
+    localStorage.setItem("loggedUser", JSON.stringify(newLoggedUser));
+    navigate('/dashboard/app');
   }
 
   return (

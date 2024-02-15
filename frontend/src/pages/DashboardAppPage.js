@@ -2,7 +2,7 @@ import { Helmet } from 'react-helmet-async';
 import { filter } from 'lodash';
 import { sentenceCase } from 'change-case';
 import { useEffect, useState, useContext } from 'react';
-import { Navigate, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 
 // @mui
 import {
@@ -42,12 +42,6 @@ import UserContext from '../UserContext'
 
 // sections
 import { UserListHead, UserListToolbar } from '../sections/@dashboard/user';
-
-
-// mock
-import USERLIST from '../_mock/user';
-import account from '../_mock/account'
-
 
 // ----------------------------------------------------------------------
 
@@ -112,18 +106,18 @@ export default function DashboardAppPage() {
 
   const [dashboard, setDashboard] = useState([])
 
-  const [tutees, setTutees] = useState([])
+  // const [tutees, setTutees] = useState([])
 
   const [user, setUser] = useContext(UserContext)
 
   const navigate = useNavigate()
 
   useEffect(() => {
-    const loggedUserJSON = window.localStorage.getItem('loggedUser') // TODO: abstract this away into separate file
+    const loggedUserJSON = localStorage.getItem('loggedUser') // TODO: abstract this away into separate file
     const parsedUser = JSON.parse(loggedUserJSON)
     if (loggedUserJSON) {
-      setUser(parsedUser)
       setAxiosHeaders()
+      setUser(parsedUser)
       // setPairingToken(parsedUser.token)
       // setSessionToken(parsedUser.token)
       // setTutorToken(parsedUser.token)
@@ -138,46 +132,58 @@ export default function DashboardAppPage() {
   }, [])
 
   // if token expires
-    getMasterPairings().catch(error => {
-      window.localStorage.removeItem('loggedUser')
-      navigate('/login')
-    })
+  // getMasterPairings().catch(error => {
+  //   console.log("error", error)
+  //   console.log("master logged me out")
+  //   localStorage.removeItem('loggedUser')
+  //   navigate('/login')
+  // })
 
   const initDashboard = (user) => {
-    if (user.username === 'EduHopeSG') {
-      getMasterPairings().then(data => { 
-        setPairings(data)
-        const dashboard = data.map(pairing => {
-          const {id} = pairing
-          const tutee = pairing.tutee.name
-          const tutor = pairing.tutor.name
-          const subject = pairing.level == null ? pairing.subjects[0].level.concat(' ', pairing.subjects[0].symbol) : pairing.level 
-          const endDate = new Date(pairing.tutor.endDate).toDateString()
-          const lastSession = Math.floor((new Date().getTime() - new Date(pairing.sessions[0].date).getTime()) / (1000 * 60 * 60 * 24))
-          return { id, tutee, tutor, subject, endDate, lastSession }
+    if (user.username === 'EduHopeSG') { // TODO: remove this, because this fails under current logic.
+      getMasterPairings()
+        .then(data => { 
+          setPairings(data)
+          const dashboard = data.map(pairing => {
+            const {id} = pairing
+            const tutee = pairing.tutee.name
+            const tutor = pairing.tutor.name
+            const subject = pairing.level == null ? pairing.subjects[0].level.concat(' ', pairing.subjects[0].symbol) : pairing.level 
+            const endDate = new Date(pairing.tutor.endDate).toDateString()
+            const lastSession = Math.floor((new Date().getTime() - new Date(pairing.sessions[0].date).getTime()) / (1000 * 60 * 60 * 24))
+            return { id, tutee, tutor, subject, endDate, lastSession }
+          })
+          setDashboard(dashboard)
         })
-        setDashboard(dashboard)
-      })
+        .catch(error => {
+          console.log("error", error)
+          localStorage.removeItem('loggedUser')
+          navigate('/login')
+        })
     } else {
-      getAllPairings(user.id).then(data => { 
-        setPairings(data)
-        const dashboard = data.map(pairing => {
-          const {id} = pairing
-          const tutee = pairing.tutee.name
-          const tutor = pairing.tutor.name
-          const subject = pairing.level == null ? pairing.subjects[0].level.concat(' ', pairing.subjects[0].symbol) : pairing.level 
-          const endDate = new Date(pairing.tutor.endDate).toDateString()
-          const lastSession = Math.floor((new Date().getTime() - new Date(pairing.sessions[0].date).getTime()) / (1000 * 60 * 60 * 24))
-          return { id, tutee, tutor, subject, endDate, lastSession }
+      getAllPairings(user.assumeRole || null)
+        .then(data => {
+          setPairings(data)
+          const dashboard = data.map(pairing => {
+            const {id} = pairing
+            const tutee = pairing.tutee.name
+            const tutor = pairing.tutor.name
+            const subject = pairing.level == null ? pairing.subjects[0].level.concat(' ', pairing.subjects[0].symbol) : pairing.level 
+            const endDate = new Date(pairing.tutor.endDate).toDateString()
+            const lastSession = Math.floor((new Date().getTime() - new Date(pairing.sessions[0].date).getTime()) / (1000 * 60 * 60 * 24))
+            return { id, tutee, tutor, subject, endDate, lastSession }
+          })
+          setDashboard(dashboard)
         })
-        setDashboard(dashboard)
-      })
+        .catch(error => {
+          console.log("error", error)
+          localStorage.removeItem('loggedUser')
+          navigate('/login')
+        })
     }
-    try {
-      getAllTutees().then(data => setTutees(data))
-    } catch {
-      navigate('/login')
-    }
+    // getAllTutees()
+    //   .then(data => setTutees(data))
+    //   .catch((err) => navigate('/login'))
   }
 
   const handleViewMore = (id) => {
@@ -200,7 +206,7 @@ export default function DashboardAppPage() {
 
   const handleSelectAllClick = (event) => {
     if (event.target.checked) {
-      const newSelecteds = tutees.map((n) => n.name);
+      const newSelecteds = pairings.map((n) => n.tutee.name);
       setSelected(newSelecteds);
       return;
     }
@@ -247,7 +253,7 @@ export default function DashboardAppPage() {
 
   const handleCloseModal = () => setModalOpen(false)
 
-  const emptyRows = page > 0 ? Math.max(0, (1 + page) * rowsPerPage - tutees.length) : 0;
+  const emptyRows = page > 0 ? Math.max(0, (1 + page) * rowsPerPage - pairings.length) : 0;
 
   const filteredUsers = applySortFilter(dashboard, getComparator(order, orderBy), filterName);
 
@@ -306,7 +312,7 @@ export default function DashboardAppPage() {
         </Typography>
         <Stack direction="row" alignItems="right" justifyContent="right">
           <Stack direction="row" alignItems="center" justifyContent="space-between" m={1}>
-            <Button variant="contained" startIcon={<Iconify icon="eva:plus-fill" />} onClick={handleNewUser}>
+            {/* <Button variant="contained" startIcon={<Iconify icon="eva:plus-fill" />} onClick={handleNewUser}>
               Pairing
             </Button>
             <Button
@@ -324,7 +330,7 @@ export default function DashboardAppPage() {
               onClick={() => {navigate('/user/tutees/addedit');}}
             >
               Tutee
-            </Button>
+            </Button> */}
           </Stack>
         </Stack>
 
@@ -338,7 +344,7 @@ export default function DashboardAppPage() {
                   order={order}
                   orderBy={orderBy}
                   headLabel={TABLE_HEAD}
-                  rowCount={tutees.length}
+                  rowCount={pairings.length}
                   numSelected={selected.length}
                   onRequestSort={handleRequestSort}
                   onSelectAllClick={handleSelectAllClick}

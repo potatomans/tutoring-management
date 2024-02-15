@@ -14,8 +14,8 @@ export const getMasterPairings = async () => {
     return res.data
 }
 
-export const getAllPairings = async (userId) => {
-    const res = await axios.get(`${baseUrl}/${userId}`)
+export const getAllPairings = async (userId = null) => {
+    const res = await axios.get(userId ? `${baseUrl}/${userId}` : `${baseUrl}`)
     return res.data
 }
 

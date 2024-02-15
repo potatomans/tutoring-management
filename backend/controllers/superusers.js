@@ -26,7 +26,7 @@ router.post("/", async (req, res) => {
 });
 
 // Get details of all pairings under a super-user
-router.get("/pairings", tokenExtractor, async (req, res) => {
+router.get("/pairings", tokenExtractor, checkIfSuperUser, async (req, res) => {
   try{
     const pairings = await Pairing.findAll({
       // where: {
@@ -85,7 +85,7 @@ router.get("/tutees", tokenExtractor, async (req, res) => {
 });
 
 // Get details of all user under a super-user
-router.get("/users", tokenExtractor, async (req, res) => {
+router.get("/users", tokenExtractor, checkIfSuperUser, async (req, res) => {
   try{
     // console.log("superuserId", req.decodedToken.id)
     const users = await User.findAll({
