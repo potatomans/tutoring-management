@@ -8,7 +8,10 @@ router.get('/', tokenExtractor, async (req, res) => {
     const pairings = await Pairing.findAll({
         include: [
             {
-                model: User
+                model: User,
+                where: {
+                    id: req.decodedToken.id,
+                },
             },
             {
                 model: Session
@@ -31,15 +34,15 @@ router.get('/', tokenExtractor, async (req, res) => {
                     name: req.query.tutor ? {[Op.iLike]: '%' + req.query.tutor + '%'} : {[Op.substring]: ''}
                 }
             }
-        ]
+        ],
     })
     res.json(pairings)
 })
 
 router.get('/:userId', tokenExtractor, async (req, res) => {
-    if (req.decodedToken.id !== Number(req.params.userId)) {
-        throw new Error('Forbidden: You do not have access to this information.')
-    }
+    // if (req.decodedToken.id !== Number(req.params.userId)) {
+    //     throw new Error('Forbidden: You do not have access to this information.')
+    // }
     const pairings = await Pairing.findAll({
         include: [
             {

@@ -1,18 +1,18 @@
 import axios from 'axios'
 
-const baseUrl = process.env.REACT_APP_TEST==="TRUE" ? 'localhost:3001/api/sessions' : '/api/sessions'
+const baseUrl = `${process.env.REACT_APP_URL}/api/sessions`;
 
-let token = null
+// let config = null
 
-export const setSessionToken = newToken => {
-  token = `Bearer ${newToken}`
-}
+// export const setSessionToken = newToken => {
+//     const token = `Bearer ${newToken}`
+//     config = {
+//         headers: { Authorization: token },
+//     }
+// }
 
 export const getAllSession = async () => {
-    const config = {
-        headers: { Authorization: token },
-    }
-    const res = await axios.get(baseUrl, config)
+    const res = await axios.get(baseUrl)
     return res.data
 }
 

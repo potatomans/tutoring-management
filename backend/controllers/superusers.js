@@ -2,7 +2,7 @@ const jwt = require("jsonwebtoken");
 const bcrypt = require("bcrypt");
 const router = require("express").Router();
 
-const { SuperUser, User, Tutor, Tutee } = require("../models");
+const { SuperUser, User, Tutor, Tutee, Pairing } = require("../models");
 const { Op } = require("sequelize");
 const { tokenExtractor, checkIfSuperUser } = require("../authMiddleware");
 
@@ -25,17 +25,45 @@ router.post("/", async (req, res) => {
   }
 });
 
+// Get details of all pairings under a super-user
+router.get("/pairings", tokenExtractor, checkIfSuperUser, async (req, res) => {
+  try{
+    const pairings = await Pairing.findAll({
+      // where: {
+      //   superUserId: req.decodedToken.id
+      // }, // TODO: change the where because pairings doesnt have a superuserid column
+      include: [
+        {
+          model: User,
+          where: {
+            superUserId: req.decodedToken.id,
+          }
+        },
+        {
+          model: Tutor,
+        },
+        {
+          model: Tutee,
+        },
+      ]
+    })
+    res.json(pairings);
+  } catch(error) {
+    console.log(error)
+    res.status(500).json({error})
+  }
+});
 
 // Get details of all tutors under a super-user
 router.get("/tutors", tokenExtractor, async (req, res) => {
   try{
-    const tutors = await Tutor.findAll(
-      { where: {
+    const tutors = await Tutor.findAll({
+      where: {
         superUserId: req.decodedToken.id
-      }}
-      )
+      }
+    })
     res.json(tutors);
-  }catch(error){
+  } catch(error){
     console.log(error)
     res.status(500).json({error})
   }
@@ -44,11 +72,11 @@ router.get("/tutors", tokenExtractor, async (req, res) => {
 // Get details of all tutees under a super-user
 router.get("/tutees", tokenExtractor, async (req, res) => {
   try{
-    const tutees = await Tutee.findAll(
-      { where: {
+    const tutees = await Tutee.findAll({
+      where: {
         superUserId: req.decodedToken.id
-      }}
-      )
+      }
+    })
     res.json(tutees);
   }catch(error){
     console.log(error)
@@ -57,15 +85,16 @@ router.get("/tutees", tokenExtractor, async (req, res) => {
 });
 
 // Get details of all user under a super-user
-router.get("/users", tokenExtractor, async (req, res) => {
+router.get("/users", tokenExtractor, checkIfSuperUser, async (req, res) => {
   try{
-    const users = await User.findAll(
-      { where: {
+    // console.log("superuserId", req.decodedToken.id)
+    const users = await User.findAll({
+      where: {
         superUserId: req.decodedToken.id
-      }}
-      )
+      }
+    })
     res.json(users);
-  }catch(error){
+  } catch (error) {
     console.log(error)
     res.status(500).json({error})
   }
@@ -83,13 +112,20 @@ router.get("/user/:id", tokenExtractor, checkIfSuperUser, async (req, res) => {
   const userForToken = {
     username: user.username,
     id: user.id,
+    superUserId: user.superUserId
   };
   const token = jwt.sign(userForToken, process.env.SECRET, {
     expiresIn: 60 * 60 * 24,
   });
   res
-  .status(200)
-  .send({ token, username: user.username, name: user.name, id: user.id });
+    .status(200)
+    .send({
+      token,
+      username: user.username,
+      name: user.name,
+      id: user.id,
+      superUserId: user.superUserId,
+    });
 });
 
 // Update password of super-user
@@ -115,5 +151,24 @@ router.get("/:id", tokenExtractor, async (req, res) => {
   });
   res.json(superUser);
 });
+
+// Create a new user
+router.post("/users", tokenExtractor, checkIfSuperUser, async (req, res)=>{
+  console.log("Adding new User")
+  const { username, name, password, email, organisation } =
+    req.body;
+  const saltRounds = 10;
+  const passwordHash = await bcrypt.hash(password, saltRounds);
+  // console.log(req.decodedToken)
+  const user = await User.create({
+    username,
+    name,
+    password: passwordHash,
+    email,
+    organisation,
+    superUserId: req.decodedToken.id,
+  });
+  res.status(201).json(user);
+})
 
 module.exports = router;

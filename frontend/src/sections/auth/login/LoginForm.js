@@ -4,15 +4,12 @@ import { useNavigate } from 'react-router-dom';
 import { Alert, Link, Stack, IconButton, InputAdornment, TextField, Checkbox } from '@mui/material';
 import { LoadingButton } from '@mui/lab';
 // components
-import Iconify from '../../../components/iconify';
 import UserContext from '../../../UserContext';
+import SuperUserContext from '../../../SuperUserContext';
+import Iconify from '../../../components/iconify';
 // services
-import { login } from '../../../services/loginService'
-import { setPairingToken } from '../../../services/pairingService';
-import { setSessionToken } from '../../../services/sessionService';
-import { setTutorToken } from '../../../services/tutorService';
-import { setTuteeToken } from '../../../services/tuteeService';
-import { setUserToken } from '../../../services/userService';
+import { login, superUserLogin } from '../../../services/loginService'
+import { setAxiosHeaders } from '../../../services/serviceConstants';
 
 // ----------------------------------------------------------------------
 
@@ -20,47 +17,77 @@ export default function LoginForm() {
   const navigate = useNavigate();
 
   const [user, setUser] = useContext(UserContext)
+  const [superUser, setSuperUser] = useContext(SuperUserContext)
 
+  const [isSuperUser, setIsSuperUser] = useState(false)
   const [username, setUsername] = useState('');
-
+  const [superUserName, setSuperUserName] = useState('');
   const [password, setPassword] = useState('');
-
   const [showPassword, setShowPassword] = useState(false);
-
   const [notif, setNotif] = useState(null);
 
   const handleClick = async () => {
     // post it to /api/login, then render accordingly.
     try {
         const user = await login({ username, password })
-        window.localStorage.setItem(
+        localStorage.setItem(
           'loggedUser', JSON.stringify(user)
-        ) 
-        setPairingToken(user.token)
-        setSessionToken(user.token)
-        setTutorToken(user.token)
-        setTuteeToken(user.token)
-        setUserToken(user.token)
+        )
+        // setPairingToken(user.token)
+        setAxiosHeaders()
+        // setSessionToken(user.token)
+        // setTutorToken(user.token)
+        // setTuteeToken(user.token)
+        // setUserToken(user.token)
         setUser(user)
         setUsername('')
         setPassword('')
         navigate('/dashboard', { replace: true });
     } catch (exception) {
         setNotif('Incorrect credentials')
-        setTimeout(() => setNotif(null), 1000)
+        setTimeout(() => setNotif(null), 5000)
     }
   };
+
+  const handleSuperUserClick = async () => {
+    try {
+        const superUser = await superUserLogin({name:superUserName, password})
+        localStorage.setItem(
+          'loggedUser', JSON.stringify(superUser)
+        )
+        setAxiosHeaders()
+        setSuperUser(superUser)
+        navigate('/superuser/users')
+    } catch (exception){
+        setNotif('Incorrect SuperUser Credentials')
+        setTimeout(()=>setNotif(null), 5000)
+    }
+  }
 
   return (
     <>
       <Stack spacing={3}>
-        <TextField name="username" label="Username" value={username} onChange={({ target }) => setUsername(target.value)} />
+        {isSuperUser ? (
+          <TextField
+            name="superUserName"
+            label="Super-User Username"
+            value={superUserName}
+            onChange={({ target }) => setSuperUserName(target.value)}
+          />
+        ) : (
+          <TextField
+            name="username"
+            label="Username"
+            value={username}
+            onChange={({ target }) => setUsername(target.value)}
+          />
+        )}
 
         <TextField
           name="password"
           label="Password"
           type={showPassword ? 'text' : 'password'}
-          value={password} 
+          value={password}
           onChange={({ target }) => setPassword(target.value)}
           InputProps={{
             endAdornment: (
@@ -74,14 +101,34 @@ export default function LoginForm() {
         />
       </Stack>
 
-      <Stack direction="row" alignItems="center" justifyContent="flex-start" sx={{ my: 2 }}>
+      {/* <Stack direction="row" alignItems="center" justifyContent="flex-start" sx={{ my: 2 }}>
         <Checkbox name="remember" label="Remember me" />
         Remember me
+      </Stack> */}
+
+      <Stack direction="row" alignItems="center" justifyContent="flex-start" sx={{ my: 2 }}>
+        <Checkbox
+          name="superUserLogin"
+          label="Super User Login"
+          onClick={() => setIsSuperUser(!isSuperUser)}
+          checked={isSuperUser}
+        />
+        SuperUser Login
       </Stack>
 
-      { notif ? <Alert variant='outlined' severity='error' sx={{ mb: 2 }}>{notif}</Alert> : null}
+      {notif ? (
+        <Alert variant="outlined" severity="error" sx={{ mb: 2 }}>
+          {notif}
+        </Alert>
+      ) : null}
 
-      <LoadingButton fullWidth size="large" type="submit" variant="contained" onClick={handleClick}>
+      <LoadingButton
+        fullWidth
+        size="large"
+        type="submit"
+        variant="contained"
+        onClick={isSuperUser ? handleSuperUserClick : handleClick}
+      >
         Login
       </LoadingButton>
     </>

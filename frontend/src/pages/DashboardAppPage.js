@@ -2,7 +2,7 @@ import { Helmet } from 'react-helmet-async';
 import { filter } from 'lodash';
 import { sentenceCase } from 'change-case';
 import { useEffect, useState, useContext } from 'react';
-import { Navigate, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 
 // @mui
 import {
@@ -29,11 +29,10 @@ import {
 } from '@mui/material';
 
 // services
-import { getAllPairings, getMasterPairings, setPairingToken } from '../services/pairingService';
-import { getAllTutees, setTuteeToken } from '../services/tuteeService';
-import { setSessionToken } from '../services/sessionService';
-import { setTutorToken } from '../services/tutorService';
-import { setUserToken } from '../services/userService';
+import { getAllPairings, getMasterPairings, } from '../services/pairingService';
+import { getAllTutees } from '../services/tuteeService';
+import { setAxiosHeaders } from '../services/serviceConstants';
+// import { setSessionToken } from '../services/sessionService';
 
 // components
 import Label from '../components/label';
@@ -43,12 +42,6 @@ import UserContext from '../UserContext'
 
 // sections
 import { UserListHead, UserListToolbar } from '../sections/@dashboard/user';
-
-
-// mock
-import USERLIST from '../_mock/user';
-import account from '../_mock/account'
-
 
 // ----------------------------------------------------------------------
 
@@ -113,22 +106,23 @@ export default function DashboardAppPage() {
 
   const [dashboard, setDashboard] = useState([])
 
-  const [tutees, setTutees] = useState([])
+  // const [tutees, setTutees] = useState([])
 
   const [user, setUser] = useContext(UserContext)
 
   const navigate = useNavigate()
 
   useEffect(() => {
-    const loggedUserJSON = window.localStorage.getItem('loggedUser')
+    const loggedUserJSON = localStorage.getItem('loggedUser') // TODO: abstract this away into separate file
     const parsedUser = JSON.parse(loggedUserJSON)
     if (loggedUserJSON) {
+      setAxiosHeaders()
       setUser(parsedUser)
-      setPairingToken(parsedUser.token)
-      setSessionToken(parsedUser.token)
-      setTutorToken(parsedUser.token)
-      setTuteeToken(parsedUser.token)
-      setUserToken(parsedUser.token)
+      // setPairingToken(parsedUser.token)
+      // setSessionToken(parsedUser.token)
+      // setTutorToken(parsedUser.token)
+      // setTuteeToken(parsedUser.token)
+      // setUserToken(parsedUser.token)
       initDashboard(parsedUser)
     } else if (!user && !parsedUser) {
       navigate('/login')
@@ -138,46 +132,58 @@ export default function DashboardAppPage() {
   }, [])
 
   // if token expires
-    getMasterPairings().catch(error => {
-      window.localStorage.removeItem('loggedUser')
-      navigate('/login')
-    })
+  // getMasterPairings().catch(error => {
+  //   console.log("error", error)
+  //   console.log("master logged me out")
+  //   localStorage.removeItem('loggedUser')
+  //   navigate('/login')
+  // })
 
   const initDashboard = (user) => {
-    if (user.username === 'EduHopeSG') {
-      getMasterPairings().then(data => { 
-        setPairings(data)
-        const dashboard = data.map(pairing => {
-          const {id} = pairing
-          const tutee = pairing.tutee.name
-          const tutor = pairing.tutor.name
-          const subject = pairing.level == null ? pairing.subjects[0].level.concat(' ', pairing.subjects[0].symbol) : pairing.level 
-          const endDate = new Date(pairing.tutor.endDate).toDateString()
-          const lastSession = Math.floor((new Date().getTime() - new Date(pairing.sessions[0].date).getTime()) / (1000 * 60 * 60 * 24))
-          return { id, tutee, tutor, subject, endDate, lastSession }
+    if (user.username === 'EduHopeSG') { // TODO: remove this, because this fails under current logic.
+      getMasterPairings()
+        .then(data => { 
+          setPairings(data)
+          const dashboard = data.map(pairing => {
+            const {id} = pairing
+            const tutee = pairing.tutee.name
+            const tutor = pairing.tutor.name
+            const subject = pairing.level == null ? pairing.subjects[0].level.concat(' ', pairing.subjects[0].symbol) : pairing.level 
+            const endDate = new Date(pairing.tutor.endDate).toDateString()
+            const lastSession = Math.floor((new Date().getTime() - new Date(pairing.sessions[0].date).getTime()) / (1000 * 60 * 60 * 24))
+            return { id, tutee, tutor, subject, endDate, lastSession }
+          })
+          setDashboard(dashboard)
         })
-        setDashboard(dashboard)
-      })
+        .catch(error => {
+          console.log("error", error)
+          localStorage.removeItem('loggedUser')
+          navigate('/login')
+        })
     } else {
-      getAllPairings(user.id).then(data => { 
-        setPairings(data)
-        const dashboard = data.map(pairing => {
-          const {id} = pairing
-          const tutee = pairing.tutee.name
-          const tutor = pairing.tutor.name
-          const subject = pairing.level == null ? pairing.subjects[0].level.concat(' ', pairing.subjects[0].symbol) : pairing.level 
-          const endDate = new Date(pairing.tutor.endDate).toDateString()
-          const lastSession = Math.floor((new Date().getTime() - new Date(pairing.sessions[0].date).getTime()) / (1000 * 60 * 60 * 24))
-          return { id, tutee, tutor, subject, endDate, lastSession }
+      getAllPairings(user.assumeRole || null)
+        .then(data => {
+          setPairings(data)
+          const dashboard = data.map(pairing => {
+            const {id} = pairing
+            const tutee = pairing.tutee.name
+            const tutor = pairing.tutor.name
+            const subject = pairing.level == null ? pairing.subjects[0].level.concat(' ', pairing.subjects[0].symbol) : pairing.level 
+            const endDate = new Date(pairing.tutor.endDate).toDateString()
+            const lastSession = Math.floor((new Date().getTime() - new Date(pairing.sessions[0].date).getTime()) / (1000 * 60 * 60 * 24))
+            return { id, tutee, tutor, subject, endDate, lastSession }
+          })
+          setDashboard(dashboard)
         })
-        setDashboard(dashboard)
-      })
+        .catch(error => {
+          console.log("error", error)
+          localStorage.removeItem('loggedUser')
+          navigate('/login')
+        })
     }
-    try {
-      getAllTutees().then(data => setTutees(data))
-    } catch {
-      navigate('/login')
-    }
+    // getAllTutees()
+    //   .then(data => setTutees(data))
+    //   .catch((err) => navigate('/login'))
   }
 
   const handleViewMore = (id) => {
@@ -200,7 +206,7 @@ export default function DashboardAppPage() {
 
   const handleSelectAllClick = (event) => {
     if (event.target.checked) {
-      const newSelecteds = tutees.map((n) => n.name);
+      const newSelecteds = pairings.map((n) => n.tutee.name);
       setSelected(newSelecteds);
       return;
     }
@@ -247,7 +253,7 @@ export default function DashboardAppPage() {
 
   const handleCloseModal = () => setModalOpen(false)
 
-  const emptyRows = page > 0 ? Math.max(0, (1 + page) * rowsPerPage - tutees.length) : 0;
+  const emptyRows = page > 0 ? Math.max(0, (1 + page) * rowsPerPage - pairings.length) : 0;
 
   const filteredUsers = applySortFilter(dashboard, getComparator(order, orderBy), filterName);
 
@@ -268,44 +274,64 @@ export default function DashboardAppPage() {
   return (
     <>
       <div>
-      <Modal
-        open={modalOpen}
-        onClose={handleCloseModal}
-        aria-labelledby ="modal-modal-title"
-        aria-describedby="modal-modal-description"
-      >
-        <Box sx={style}>
-          <Typography id="modal-modal-title" variant="h6" component="h2">
-            Update current pairing (feature to be added!)
-          </Typography>
-          <Typography id="modal-modal-description" sx={{ mt: 2 }}>
-            <form onSubmit={handleUpdatePairing}>
-              <div>
-                <TextField name="tutee" label="Tutee name" sx={{ py: 0.5 }}/>
-                <TextField name="tutor" label="Tutor name" sx={{ py: 0.5 }}/>
-                <TextField name="level" label="Level and subject" sx={{ py: 0.5 }}/>
-                <TextField name="tutorNum" label="Tutor number" sx={{ py: 0.5 }}/>
-                <TextField name="endDate" label="Tutor end date" sx={{ py: 0.5 }}/>
-              </div>
-              <Button type='submit' variant='contained'>Create new</Button>
-            </form>
-          </Typography>
-        </Box>
-      </Modal>
-    </div>
+        <Modal
+          open={modalOpen}
+          onClose={handleCloseModal}
+          aria-labelledby="modal-modal-title"
+          aria-describedby="modal-modal-description"
+        >
+          <Box sx={style}>
+            <Typography id="modal-modal-title" variant="h6" component="h2">
+              Update current pairing (feature to be added!)
+            </Typography>
+            <Typography id="modal-modal-description" sx={{ mt: 2 }}>
+              <form onSubmit={handleUpdatePairing}>
+                <div>
+                  <TextField name="tutee" label="Tutee name" sx={{ py: 0.5 }} />
+                  <TextField name="tutor" label="Tutor name" sx={{ py: 0.5 }} />
+                  <TextField name="level" label="Level and subject" sx={{ py: 0.5 }} />
+                  <TextField name="tutorNum" label="Tutor number" sx={{ py: 0.5 }} />
+                  <TextField name="endDate" label="Tutor end date" sx={{ py: 0.5 }} />
+                </div>
+                <Button type="submit" variant="contained">
+                  Create new
+                </Button>
+              </form>
+            </Typography>
+          </Box>
+        </Modal>
+      </div>
 
       <Helmet>
         <title> Dashboard </title>
       </Helmet>
 
       <Container maxWidth="xl">
-        <Stack direction="row" alignItems="center" justifyContent="space-between" mb={5}>
-          <Typography variant="h4" sx={{ mb: 5 }}>
-            Hi {user.username}, Welcome back
-          </Typography>
-          <Button variant="contained" startIcon={<Iconify icon="eva:plus-fill" />} onClick={handleNewUser}>
-            Update Pairing
-          </Button>
+        <Typography variant="h4">
+          Hi {user.username}, Welcome back
+        </Typography>
+        <Stack direction="row" alignItems="right" justifyContent="right">
+          <Stack direction="row" alignItems="center" justifyContent="space-between" m={1}>
+            {/* <Button variant="contained" startIcon={<Iconify icon="eva:plus-fill" />} onClick={handleNewUser}>
+              Pairing
+            </Button>
+            <Button
+              variant="contained"
+              startIcon={<Iconify icon="eva:plus-fill" />}
+              sx={{ ml: 1, width: 100 }}
+              onClick={() => {navigate('/user/tutors/addedit')}}
+            >
+              Tutor
+            </Button>
+            <Button
+              variant="contained"
+              startIcon={<Iconify icon="eva:plus-fill" />}
+              sx={{ ml: 1, width: 100 }}
+              onClick={() => {navigate('/user/tutees/addedit');}}
+            >
+              Tutee
+            </Button> */}
+          </Stack>
         </Stack>
 
         <Card>
@@ -318,14 +344,14 @@ export default function DashboardAppPage() {
                   order={order}
                   orderBy={orderBy}
                   headLabel={TABLE_HEAD}
-                  rowCount={tutees.length}
+                  rowCount={pairings.length}
                   numSelected={selected.length}
                   onRequestSort={handleRequestSort}
                   onSelectAllClick={handleSelectAllClick}
                 />
                 <TableBody>
                   {filteredUsers.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((row) => {
-                    const { id, tutee, tutor, subject, endDate, lastSession } = row
+                    const { id, tutee, tutor, subject, endDate, lastSession } = row;
                     const selectedUser = selected.indexOf(tutee) !== -1;
 
                     return (
@@ -336,7 +362,7 @@ export default function DashboardAppPage() {
 
                         <TableCell component="th" scope="row" padding="none">
                           <Stack direction="row" alignItems="center" spacing={2}>
-                            <Avatar alt={tutee} src='/assets/images/avatars/avatar_10.jpg' />
+                            <Avatar alt={tutee} src="/assets/images/avatars/avatar_10.jpg" />
                             <Typography variant="subtitle2" noWrap>
                               {tutee}
                             </Typography>
@@ -352,7 +378,9 @@ export default function DashboardAppPage() {
                         <TableCell align="left">{lastSession}</TableCell>
 
                         <TableCell align="right">
-                          <Button variant="outlined" onClick={() => handleViewMore(id)}>More</Button>
+                          <Button variant="outlined" onClick={() => handleViewMore(id)}>
+                            More
+                          </Button>
                           <IconButton size="large" color="inherit" onClick={handleOpenMenu}>
                             <Iconify icon={'eva:more-vertical-fill'} />
                           </IconButton>

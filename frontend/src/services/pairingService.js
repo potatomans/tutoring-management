@@ -1,42 +1,31 @@
 import axios from 'axios'
 
-const baseUrl = process.env.REACT_APP_TEST==="TRUE" ? 'localhost:3001/api/pairings' : '/api/pairings'
+const baseUrl = `${process.env.REACT_APP_URL}/api/pairings`;
 
-let token = null
-
-export const setPairingToken = newToken => {
-  token = `Bearer ${newToken}`
-}
+// export const setPairingToken = newToken => {
+//     const token = `Bearer ${newToken}`
+//     config = {
+//         headers: { Authorization: token },
+//     }
+// }
 
 export const getMasterPairings = async () => {
-    const config = {
-        headers: { Authorization: token },
-    }
-    const res = await axios.get(baseUrl, config)
+    const res = await axios.get(baseUrl)
     return res.data
 }
 
-export const getAllPairings = async (userId) => {
-    const config = {
-        headers: { Authorization: token },
-    }
-    const res = await axios.get(`${baseUrl}/${userId}`, config)
+export const getAllPairings = async (userId = null) => {
+    const res = await axios.get(userId ? `${baseUrl}/${userId}` : `${baseUrl}`)
     return res.data
 }
 
 export const getPairing = async (id) => {
-    const config = {
-        headers: { Authorization: token },
-    }
-    const res = await axios.get(`${baseUrl}/user/${id}`, config)
+    const res = await axios.get(`${baseUrl}/user/${id}`)
     return res.data
 }
 
 export const getPairingId = async (tutee, tutor) => {
-    const config = {
-        headers: { Authorization: token },
-    }
-    const res = await axios.get(`${baseUrl}?tutee=${tutee}&tutor=${tutor}`, config)
+    const res = await axios.get(`${baseUrl}?tutee=${tutee}&tutor=${tutor}`)
     if (res.data.length === 0) {
         throw new Error('Tutee and/or tutor does not exist. Maybe try their first names?')
     }
@@ -49,10 +38,7 @@ export const createPairing = async (pairing) => {
 }
 
 export const checkPairingExist = async (tutee, tutor) => {
-    const config = {
-        headers: { Authorization: token },
-    }
-    const res = await axios.get(`${baseUrl}?tutee=${tutee}&tutor=${tutor}`, config)
+    const res = await axios.get(`${baseUrl}?tutee=${tutee}&tutor=${tutor}`)
     if (res.data.length === 0) {
         return false
     }

@@ -21,8 +21,8 @@ module.exports = {
     });
   },
   down: async ({ context: queryInterface }) => {
-    await queryInterface.dropTable("tutors");
-    await queryInterface.dropTable("tutees");
-    await queryInterface.dropTable("users");
+    await queryInterface.removeColumn("tutors", 'super_user_id')
+    await queryInterface.removeColumn("tutees", "super_user_id");
+    await queryInterface.removeColumn("users", "super_user_id");
   },
 };
