@@ -24,6 +24,29 @@ router.get('/', tokenExtractor, async (req, res) => {
             },
             {
                 model: Tutee,
+                // where: {
+                //     name: req.query.tutee ? {[Op.iLike]: '%' + req.query.tutee + '%'} : {[Op.substring]: ''}
+                // }
+            },
+            {
+                model: Tutor,
+                // where: {
+                //     name: req.query.tutor ? {[Op.iLike]: '%' + req.query.tutor + '%'} : {[Op.substring]: ''}
+                // }
+            }
+        ],
+    })
+    res.json(pairings)
+})
+
+router.get('/check-existing', tokenExtractor, async (req, res) => {
+    const pairings = await Pairing.findAll({
+        include: [
+            {
+                model: User,
+            },
+            {
+                model: Tutee,
                 where: {
                     name: req.query.tutee ? {[Op.iLike]: '%' + req.query.tutee + '%'} : {[Op.substring]: ''}
                 }
@@ -34,9 +57,9 @@ router.get('/', tokenExtractor, async (req, res) => {
                     name: req.query.tutor ? {[Op.iLike]: '%' + req.query.tutor + '%'} : {[Op.substring]: ''}
                 }
             }
-        ],
-    })
-    res.json(pairings)
+        ]
+    });
+    res.json(pairings);
 })
 
 router.get('/:userId', tokenExtractor, async (req, res) => {

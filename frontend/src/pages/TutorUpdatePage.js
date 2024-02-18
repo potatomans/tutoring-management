@@ -142,7 +142,6 @@ export default function TutorUpdatePage() {
         try {
             // NOTE: i have yet to solve the problem of tutors/tutees with similar names. it will be a problem as getPairingId returns an array with more than one element!
             // post to /api/sessions
-            // setPairingToken(process.env.REACT_APP_SEARCH_TOKEN)
             setAxiosHeaders(process.env.REACT_APP_SEARCH_TOKEN)
             const pairingId = await getPairingId(tutee, tutor)
             const session = {
