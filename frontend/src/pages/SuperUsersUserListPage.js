@@ -29,6 +29,7 @@ import GenericTableHead from "../components/generic-table-head/index";
 const TABLE_HEAD = [
   { id: 'name', label: 'Name', alignRight: false },
   { id: 'email', label: 'Email', alignRight: false },
+  {}, // Keep empty object for uniform heading colour
 ];
 
 
