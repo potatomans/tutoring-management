@@ -47,7 +47,7 @@ const SuperUsersPairingListPage = () => {
       // setSuperUserToken(parsedSuperUser.superUserToken);
       initPage();
     } else if (!superUser && !parsedSuperUser) {
-      alert('No logged in S-User');
+      alert('No logged in SuperUser');
       navigate('/login');
     } else {
       initPage(superUser);
@@ -77,11 +77,11 @@ const SuperUsersPairingListPage = () => {
               <Table>
                 <GenericTableHead headLabel={TABLE_HEAD} />
                 <TableBody>
-                  {pairingList.map((pairing) => {
-                    const { id, user, tutor, tutee } = pairing;
+                  {pairingList.map((pairing, index) => {
+                    const { user, tutor, tutee } = pairing;
                     return (
-                      <TableRow key={id}>
-                        <TableCell align="left">{id}</TableCell>
+                      <TableRow key={index}>
+                        <TableCell align="left">{index + 1}</TableCell>
                         <TableCell align="left">{user.name}</TableCell>
                         <TableCell align="left">{user.organisation}</TableCell>
                         <TableCell align="left">{tutor.name}</TableCell>

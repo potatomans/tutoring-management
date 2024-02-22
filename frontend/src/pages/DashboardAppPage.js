@@ -139,6 +139,12 @@ export default function DashboardAppPage() {
   //   navigate('/login')
   // })
 
+  const getLatestDate = (dateArr) => { // Dates are in ISO String format. Is it time to use Typescript?? Gasp!
+    const datesInMilliseconds = dateArr.map(date => new Date(date).getTime());
+    datesInMilliseconds.sort((a, b) => (b - a));
+    return new Date(datesInMilliseconds[0]);
+  };
+
   const initDashboard = (user) => {
     if (user.username === 'EduHopeSG') { // TODO: remove this, because this fails under current logic.
       getMasterPairings()
@@ -170,7 +176,8 @@ export default function DashboardAppPage() {
             const tutor = pairing.tutor.name
             const subject = pairing.level == null ? pairing.subjects[0].level.concat(' ', pairing.subjects[0].symbol) : pairing.level 
             const endDate = new Date(pairing.tutor.endDate).toDateString()
-            const lastSession = Math.floor((new Date().getTime() - new Date(pairing.sessions[0].date).getTime()) / (1000 * 60 * 60 * 24))
+            const sessionDatesArr = pairing.sessions.map(session => session.date)
+            const lastSession = Math.floor((new Date().getTime() - getLatestDate(sessionDatesArr).getTime()) / (1000 * 60 * 60 * 24))
             return { id, tutee, tutor, subject, endDate, lastSession }
           })
           setDashboard(dashboard)
