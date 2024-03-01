@@ -174,7 +174,7 @@ export default function DashboardAppPage() {
             const {id} = pairing
             const tutee = pairing.tutee.name
             const tutor = pairing.tutor.name
-            const subject = pairing.level == null ? pairing.subjects[0].level.concat(' ', pairing.subjects[0].symbol) : pairing.level 
+            const subject = pairing.level == null ? (pairing.subjects.length !== 0 ? pairing.subjects[0].level.concat(' ', pairing.subjects[0].symbol) : "Primary 6 MATH") : pairing.level 
             const endDate = new Date(pairing.tutor.endDate).toDateString()
             const sessionDatesArr = pairing.sessions.map(session => session.date)
             const lastSession = Math.floor((new Date().getTime() - getLatestDate(sessionDatesArr).getTime()) / (1000 * 60 * 60 * 24))
