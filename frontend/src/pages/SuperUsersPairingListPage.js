@@ -14,7 +14,12 @@ import {
   Container,
   Typography,
   TableContainer,
+  IconButton,
 } from '@mui/material';
+
+// @mui icons
+import EditIcon from '@mui/icons-material/Edit';
+import VisibilityIcon from '@mui/icons-material/Visibility';
 
 // services
 import { getAllSuperUserPairings } from '../services/superUserService';
@@ -32,6 +37,8 @@ const TABLE_HEAD = [
   { id: 'Organisation', label: 'Organisation', alignRight: false },
   { id: 'Tutor', label: 'Tutor', alignRight: false },
   { id: 'Tutee', label: 'Tutee', alignRight: false },
+  {},
+  {},
 ];
 
 const SuperUsersPairingListPage = () => {  
@@ -78,7 +85,7 @@ const SuperUsersPairingListPage = () => {
                 <GenericTableHead headLabel={TABLE_HEAD} />
                 <TableBody>
                   {pairingList.map((pairing, index) => {
-                    const { user, tutor, tutee } = pairing;
+                    const { id, user, tutor, tutee } = pairing;
                     return (
                       <TableRow key={index}>
                         <TableCell align="left">{index + 1}</TableCell>
@@ -86,6 +93,17 @@ const SuperUsersPairingListPage = () => {
                         <TableCell align="left">{user.organisation}</TableCell>
                         <TableCell align="left">{tutor.name}</TableCell>
                         <TableCell align="left">{tutee.name}</TableCell>
+                        <TableCell>
+                          <IconButton color="default"><VisibilityIcon /></IconButton>
+                        </TableCell>
+                        <TableCell>
+                          <IconButton 
+                            color="default" 
+                            onClick={() => navigate(`/superuser/pairings/edit/${id}`)}
+                          >
+                            <EditIcon />
+                          </IconButton>
+                        </TableCell>
                         {/* <TableCell align="left">{name}</TableCell> */}
                       </TableRow>
                     );

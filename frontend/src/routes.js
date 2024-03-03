@@ -14,6 +14,7 @@ import SuperUsersUserListPage from './pages/SuperUsersUserListPage';
 import SuperUsersTutorListPage from './pages/SuperUsersTutorListPage';
 import SuperUsersTuteeListPage from './pages/SuperUsersTuteeListPage';
 import SuperUsersPairingListPage from './pages/SuperUsersPairingListPage';
+import SuperUsersPairingEditPage from './pages/SuperUsersPairingEditPage';
 import AddEditUserPage from './pages/AddEditUserPage';
 import AddEditTutorPage from './pages/AddEditTutorPage';
 import AddEditTuteePage from './pages/AddEditTuteePage';
@@ -42,7 +43,11 @@ export default function Router() {
         { path: 'users', element: <SuperUsersUserListPage /> },
         { path: 'tutors', element: <SuperUsersTutorListPage /> },
         { path: 'tutees', element: <SuperUsersTuteeListPage /> },
-        { path: 'pairings', element: <SuperUsersPairingListPage /> },
+        { path: 'pairings', element: <SuperUserLayout />, children: [
+          { element: <Navigate to="/superuser/pairings/list" />, index: true },
+          { path: 'list', element: <SuperUsersPairingListPage /> },
+          { path: 'edit/:pairingId', element: <SuperUsersPairingEditPage /> },
+        ] },
         { path: 'users/addedit', element: <AddEditUserPage /> },
       ],
     },
