@@ -43,7 +43,7 @@ export default function Router() {
         { path: 'users', element: <SuperUsersUserListPage /> },
         { path: 'tutors', element: <SuperUsersTutorListPage /> },
         { path: 'tutees', element: <SuperUsersTuteeListPage /> },
-        { path: 'pairings', element: <SuperUserLayout />, children: [
+        { path: 'pairings', children: [
           { element: <Navigate to="/superuser/pairings/list" />, index: true },
           { path: 'list', element: <SuperUsersPairingListPage /> },
           { path: 'edit/:pairingId', element: <SuperUsersPairingEditPage /> },

@@ -101,7 +101,7 @@ export default function TutorUpdatePage() {
                 strengths,
                 weaknesses,
                 goals
-            }
+            } // TODO: add level, subjectName and location
             await createPairing(pairing)
             // post to /api/sessions
             const pairingId = await getPairingId(tutee, tutor)

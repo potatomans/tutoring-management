@@ -93,9 +93,9 @@ const SuperUsersPairingListPage = () => {
                         <TableCell align="left">{user.organisation}</TableCell>
                         <TableCell align="left">{tutor.name}</TableCell>
                         <TableCell align="left">{tutee.name}</TableCell>
-                        <TableCell>
+                        {/* <TableCell>
                           <IconButton color="default"><VisibilityIcon /></IconButton>
-                        </TableCell>
+                        </TableCell> */}
                         <TableCell>
                           <IconButton 
                             color="default" 

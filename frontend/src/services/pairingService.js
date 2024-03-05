@@ -44,3 +44,8 @@ export const checkPairingExist = async (tutee, tutor) => {
     }
     return true
 }
+
+export const updatePairing = async ({ pairingId, newPairing }) => {
+    const res = await axios.put(`${baseUrl}/${pairingId}`, newPairing)
+    return res.data
+}
