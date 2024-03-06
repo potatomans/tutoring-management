@@ -2,7 +2,7 @@ import { Helmet } from 'react-helmet-async';
 import { useState } from 'react';
 // @mui
 import { styled } from '@mui/material/styles';
-import { Alert, Link, Container, FormControlLabel, Typography, TextField, Stack, Button, Item, Switch, FormGroup, MenuItem, Select, InputLabel, FormControl, stepperClasses } from '@mui/material';
+import { Autocomplete, Alert, Link, Container, FormControlLabel, Typography, TextField, Stack, Button, Item, Switch, FormGroup, MenuItem, Select, InputLabel, FormControl, stepperClasses } from '@mui/material';
 // import { AdapterDayjs, DatePicker, LocalizationProvider } from '@mui/x-date-pickers';
 // import { Dayjs } from 'dayjs';
 // hooks
@@ -19,6 +19,9 @@ import { setAxiosHeaders, removeAxiosHeaders } from '../services/serviceConstant
 // components
 import Logo from '../components/logo';
 import Iconify from '../components/iconify';
+
+// levels and subjectNames
+import { levels, subjectNames } from '../data/constants'
 
 // ----------------------------------------------------------------------
 
@@ -48,6 +51,10 @@ const StyledField = styled(TextField)(({ theme }) => ({
 
 export default function TutorUpdatePage() {
     const [first, setFirst] = useState(true)
+
+    const [level, setLevel] = useState('')
+
+    const [subjectName, setSubjectName] = useState('')
 
     const [manager, setManager] = useState('')
 
@@ -100,7 +107,9 @@ export default function TutorUpdatePage() {
                 tutorId: newTutor.id,
                 strengths,
                 weaknesses,
-                goals
+                goals,
+                level,
+                subjectName,
             } // TODO: add level, subjectName and location
             await createPairing(pairing)
             // post to /api/sessions
@@ -118,6 +127,8 @@ export default function TutorUpdatePage() {
 
             removeAxiosHeaders()
             setManager('')
+            setLevel('')
+            setSubjectName('')
             setStrengths('')
             setWeaknesses('')
             setGoals('')
@@ -175,11 +186,11 @@ export default function TutorUpdatePage() {
                 <title> Update tutor </title>
             </Helmet>
             
-            <StyledRoot>
+            <StyledRoot sx={{ maxWidth: "xl" }}>
                 {mdUp && (
                     <StyledContent>
                         <Typography variant="h2" sx={{ px: 4, mt: 2, mr: 5}}>
-                        Tutor Update Form
+                            Tutor Update Form
                         </Typography>
                     </StyledContent>
                 )}
@@ -190,48 +201,152 @@ export default function TutorUpdatePage() {
                 </FormGroup>
 
                 <form onSubmit={first ? handleFirstSubmit : handleSubmit}>
-                    { first ? 
-                    <div>
-                        <Stack spacing={0.5}>
-                            <StyledField required value={manager} onChange={({ target }) => setManager(target.value)} name="manager" label="Name of volunteer manager" />    
+                    { first && 
+                    (<div>
+                        <Stack spacing={2} direction="row" sx={{marginBottom: 0.5}}>
+                            <StyledField 
+                                required 
+                                value={manager} 
+                                onChange={({ target }) => setManager(target.value)} 
+                                name="manager" 
+                                label="Name of volunteer manager"
+                                sx={{ width: "20rem" }}
+                            />    
                         </Stack>
-                        <Stack spacing={0.5}>
-                            <StyledField required value={strengths} onChange={({ target }) => setStrengths(target.value)} name="strengths" label="Strengths of tutee" style={first ? {display: 'flex'} : {display: 'none'}} multiline />    
+                        <Stack spacing={1} direction="row" sx={{marginBottom: 0.5}}>
+                            <Autocomplete
+                                options={levels}
+                                label="Level"
+                                sx={{ width: 300, padding: "0.5rem" }}
+                                renderInput={(params) => <TextField {...params} label="Level" />}
+                                value={level}
+                                onChange={(ev, value) => setLevel(value)}
+                            />
+                            <Autocomplete
+                                options={subjectNames}
+                                label="Subject Name"
+                                sx={{ width: 300, padding: "0.5rem" }}
+                                renderInput={(params) => <TextField {...params} label="Subject Name" />}
+                                value={subjectName}
+                                onChange={(ev, value) => setSubjectName(value)}
+                            />
+                        </Stack>
+                        <Stack spacing={2} direction="row" sx={{marginBottom: 0.5}}>
+                            <StyledField 
+                                required 
+                                value={strengths} 
+                                onChange={({ target }) => setStrengths(target.value)} 
+                                name="strengths" 
+                                label="Strengths of tutee" 
+                                style={first ? {display: 'flex'} : {display: 'none'}}
+                                sx={{ width: "30rem" }}
+                                multiline 
+                            />    
                         </Stack>                
-                        <Stack spacing={0.5}>
-                            <StyledField required value={weaknesses} onChange={({ target }) => setWeaknesses(target.value)} name="weaknesses" label="Weaknesses of tutee" style={first ? {display: 'flex'} : {display: 'none'}} multiline />    
+                        <Stack spacing={2} direction="row" sx={{marginBottom: 0.5}}>
+                            <StyledField 
+                                required 
+                                value={weaknesses} 
+                                onChange={({ target }) => setWeaknesses(target.value)} 
+                                name="weaknesses" 
+                                label="Weaknesses of tutee" 
+                                style={first ? {display: 'flex'} : {display: 'none'}}
+                                sx={{ width: "30rem" }}
+                                multiline 
+                            />    
                         </Stack> 
-                        <Stack spacing={0.5}>
-                            <StyledField required value={goals} onChange={({ target }) => setGoals(target.value)} name="goals" label="Goals for tutee" style={first ? {display: 'flex'} : {display: 'none'}} multiline />    
+                        <Stack spacing={2} direction="row" sx={{marginBottom: 0.5}}>
+                            <StyledField 
+                                required 
+                                value={goals} 
+                                onChange={({ target }) => setGoals(target.value)} 
+                                name="goals" 
+                                label="Goals for tutee" 
+                                style={first ? {display: 'flex'} : {display: 'none'}}
+                                sx={{ width: "30rem" }}
+                                multiline 
+                            />    
                         </Stack> 
-                    </div>
-                    : null }
-                    <StyledField required value={tutor} onChange={({ target }) => setTutor(target.value)} name="tutor" label="Full Tutor name" />
-                    <StyledField required value={tutee} onChange={({ target }) => setTutee(target.value)} name="tutee" label="Full Tutee name" />
-                    <StyledField required type='date' value={date} onChange={({ target }) => setDate(target.value)} name="date" label="Date of session" />
-                    <FormControl sx={{ minWidth: 150, justifyContent: 'center' }} required>
-                        <InputLabel id="hours">No. of hours</InputLabel>
-                        <Select 
-                            label="Hours"
-                            value={hours}
-                            onChange={(e) => setHours(e.target.value)}
-                        >
-                            <MenuItem value={0.5}>0.5</MenuItem>
-                            <MenuItem value={1}>1</MenuItem>
-                            <MenuItem value={1.5}>1.5</MenuItem>
-                            <MenuItem value={2}>2</MenuItem>
-                        </Select>
-                    </FormControl>
-                    <Stack spacing={0.5}>
-                        <StyledField required value={overview} onChange={({ target }) => setOverview(target.value)} name="overview" label="How did the session go?" multiline />    
+                    </div>)}
+                    <Stack spacing={1} direction="row" sx={{marginBottom: 0.5}}>
+                        <StyledField
+                            required
+                            value={tutor}
+                            onChange={({ target }) => setTutor(target.value)}
+                            name="tutor"
+                            label="Full Tutor name"
+                        />
+                        <StyledField
+                            required 
+                            value={tutee} 
+                            onChange={({ target }) => setTutee(target.value)} 
+                            name="tutee" 
+                            label="Full Tutee name" 
+                        />
                     </Stack>
-                    <Stack spacing={0.5}>
-                        <StyledField value={problems} onChange={({ target }) => setProblems(target.value)} name="problems" label="Any problems faced?" multiline />    
+                    <Stack spacing={1} direction="row" sx={{marginBottom: 0.5}}>
+                        <StyledField 
+                            required 
+                            type='date' 
+                            value={date} 
+                            onChange={({ target }) => setDate(target.value)} 
+                            name="date" 
+                            label="Date of session" 
+                        />
+                        <FormControl sx={{ m: 1, minWidth: 150, padding: "1rem" }} size="small" required>
+                            <InputLabel id="hours">No. of hours</InputLabel>
+                            <Select 
+                                label="Hours"
+                                value={hours}
+                                onChange={(e) => setHours(e.target.value)}
+                            >
+                                <MenuItem value={0.5}>0.5</MenuItem>
+                                <MenuItem value={1}>1</MenuItem>
+                                <MenuItem value={1.5}>1.5</MenuItem>
+                                <MenuItem value={2}>2</MenuItem>
+                            </Select>
+                        </FormControl>
+                    </Stack>
+                    <Stack spacing={2} direction="row" sx={{marginBottom: 0.5}}>
+                        <StyledField 
+                            required 
+                            value={overview} 
+                            onChange={({ target }) => setOverview(target.value)} 
+                            name="overview" 
+                            label="How did the session go?"
+                            multiline
+                            sx={{ width: "30rem" }}
+                        />    
+                    </Stack>
+                    <Stack spacing={2} direction="row" sx={{marginBottom: 0.5}}>
+                        <StyledField 
+                            value={problems} 
+                            onChange={({ target }) => setProblems(target.value)} 
+                            name="problems" 
+                            label="Any problems faced?" 
+                            multiline
+                            sx={{ width: "30rem" }}
+                        />    
                     </Stack>                
-                    <Stack spacing={0.5}>
-                        <StyledField value={nextSession} onChange={({ target }) => setNextSession(target.value)} name="next_session" label="What will you cover for the next session?" multiline />    
+                    <Stack spacing={2} direction="row" sx={{marginBottom: 0.5}}>
+                        <StyledField 
+                            value={nextSession} 
+                            onChange={({ target }) => setNextSession(target.value)} 
+                            name="next_session" 
+                            label="What will you cover for the next session?" 
+                            multiline
+                            sx={{ width: "30rem" }}
+                        />    
                     </Stack> 
-                    <Button type='submit' variant='contained' sx={{ ml: 1 }} disabled={disabled}>Submit</Button>
+                    <Button 
+                        type='submit'
+                        variant='contained'
+                        sx={{ ml: 1 }}
+                        disabled={disabled}
+
+                    >
+                        Submit
+                    </Button>
                 </form>
             </StyledRoot>
         </>

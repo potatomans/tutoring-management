@@ -17,30 +17,7 @@ import dayjs from "dayjs";
 import { getPairing, updatePairing } from "../services/pairingService";
 import { updateTutor } from "../services/tutorService";
 
-// List of subject levels. TODO: consider moving these to a constants file, especially if reusing logic.
-const levels = [
-  "Primary 1",
-  "Primary 2",
-  "Primary 3",
-  "Primary 4",
-  "Primary 5",
-  "Primary 6",
-  "Secondary 1",
-  "Secondary 2",
-  "Secondary 3",
-  "Secondary 4",
-  "Secondary 5",
-];
-
-const subjectNames = [
-  "Chinese",
-  "Combined Science",
-  "English",
-  "Malay",
-  "Mathematics",
-  "Science",
-  "Tamil",
-]
+import { levels, subjectNames } from "../data/constants"
 
 const SuperUsersPairingEditPage = () => {
   const { pairingId } = useParams();
@@ -89,8 +66,9 @@ const SuperUsersPairingEditPage = () => {
       <IconButton 
         color="default"
         onClick={() => navigate('/superuser/pairings')}
+        sx={{marginBottom: 2}}
       >
-        <ArrowBackIcon sx={{marginBottom: 2}} />
+        <ArrowBackIcon />
       </IconButton>
       <form onSubmit={handleFormSubmit}>
         <Stack spacing={2} direction="row" sx={{marginBottom: 2}}>

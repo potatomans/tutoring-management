@@ -1,10 +1,11 @@
 import { Helmet } from 'react-helmet-async';
-import { useLocation } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 
 // @mui
 import { styled } from '@mui/material/styles';
-import { Box, Link, Container, Typography, TextField, Divider, Stack, Button, Accordion, AccordionSummary, AccordionDetails } from '@mui/material';
-import { ExpandMore } from '@mui/icons-material'
+import { Box, Link, Container, Typography, TextField, Divider, Stack, Button, Accordion, AccordionSummary, AccordionDetails, IconButton } from '@mui/material';
+import { ExpandMore } from '@mui/icons-material';
+import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 
 // components
 import { useEffect, useState } from 'react';
@@ -57,7 +58,7 @@ export default function UserInfoPage() {
             setPairing(data)
             const tutee = {
                 tuteeName: data.tutee.name,
-                subject: data.level == null ? data.subjects[0].level.concat(' ', data.subjects[0].name) : data.level,
+                subject: data.level ? data.level.concat(' ', data.subjectName) : "NIL",
                 noOfSessions: data.sessions.length,
                 organisation: data.user.organisation, 
                 tutorName: data.tutor.name,
@@ -69,18 +70,30 @@ export default function UserInfoPage() {
         })
     }, [])
 
-    const [pairing, setPairing] = useState([])
+    const [pairing, setPairing] = useState([]);
 
-    const [tutee, setTutee] = useState([])
+    const [tutee, setTutee] = useState([]);
+
+    const navigate = useNavigate();
 
     const mdUp = useResponsive('up', 'md');
 
     const { tuteeName, subject, location, noOfSessions, organisation, tutorName, tutorNum, endDate, strengths, weaknesses, sessions } = tutee
 
     return (
-        <>
+        <Container maxWidth="xl">
+            <IconButton 
+                color="default"
+                onClick={() => navigate('/dashboard/app')}
+            >
+                <ArrowBackIcon />
+            </IconButton>
             <StyledRoot>
                 <h1>{tuteeName}</h1>
+            </StyledRoot>
+            <StyledRoot>
+                <Typography variant='h5'>Location of tutoring sessions</Typography>
+                <Typography variant='subtitle3'>{location}</Typography>
             </StyledRoot>
             <StyledRoot>
                 <Typography variant='h5'>Level/Subject(s)</Typography>
@@ -107,6 +120,6 @@ export default function UserInfoPage() {
             <Helmet>
                 <title> {tuteeName || 'Tutor Info'} </title>
             </Helmet>
-        </>
+        </Container>
     )
 }
