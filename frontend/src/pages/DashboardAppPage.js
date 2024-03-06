@@ -146,27 +146,27 @@ export default function DashboardAppPage() {
   };
 
   const initDashboard = (user) => {
-    if (user.username === 'EduHopeSG') { // TODO: remove this, because this fails under current logic.
-      getMasterPairings()
-        .then(data => { 
-          setPairings(data)
-          const dashboard = data.map(pairing => {
-            const {id} = pairing
-            const tutee = pairing.tutee.name
-            const tutor = pairing.tutor.name
-            const subject = pairing.level == null ? pairing.subjects[0].level.concat(' ', pairing.subjects[0].symbol) : pairing.level 
-            const endDate = new Date(pairing.tutor.endDate).toDateString()
-            const lastSession = Math.floor((new Date().getTime() - new Date(pairing.sessions[0].date).getTime()) / (1000 * 60 * 60 * 24))
-            return { id, tutee, tutor, subject, endDate, lastSession }
-          })
-          setDashboard(dashboard)
-        })
-        .catch(error => {
-          console.log("error", error)
-          localStorage.removeItem('loggedUser')
-          navigate('/login')
-        })
-    } else {
+    // if (user.username === 'EduHopeSG') { // TODO: remove this, because this fails under current logic.
+    //   getMasterPairings()
+    //     .then(data => { 
+    //       setPairings(data)
+    //       const dashboard = data.map(pairing => {
+    //         const {id} = pairing
+    //         const tutee = pairing.tutee.name
+    //         const tutor = pairing.tutor.name
+    //         const subject = pairing.level == null ? pairing.subjects[0].level.concat(' ', pairing.subjects[0].symbol) : pairing.level 
+    //         const endDate = new Date(pairing.tutor.endDate).toDateString()
+    //         const lastSession = Math.floor((new Date().getTime() - new Date(pairing.sessions[0].date).getTime()) / (1000 * 60 * 60 * 24))
+    //         return { id, tutee, tutor, subject, endDate, lastSession }
+    //       })
+    //       setDashboard(dashboard)
+    //     })
+    //     .catch(error => {
+    //       console.log("error", error)
+    //       localStorage.removeItem('loggedUser')
+    //       navigate('/login')
+    //     })
+    // } else {
       getAllPairings(user.assumeRole || null)
         .then(data => {
           setPairings(data)
@@ -174,7 +174,7 @@ export default function DashboardAppPage() {
             const {id} = pairing
             const tutee = pairing.tutee.name
             const tutor = pairing.tutor.name
-            const subject = pairing.level == null ? pairing.subjects[0].level.concat(' ', pairing.subjects[0].symbol) : pairing.level 
+            const subject = pairing.level ? pairing.level.concat(' ', pairing.subjectName) : "NIL" // pairing.level == null ? pairing.subjects[0].level.concat(' ', pairing.subjects[0].symbol) : pairing.level 
             const endDate = new Date(pairing.tutor.endDate).toDateString()
             const sessionDatesArr = pairing.sessions.map(session => session.date)
             const lastSession = Math.floor((new Date().getTime() - getLatestDate(sessionDatesArr).getTime()) / (1000 * 60 * 60 * 24))
@@ -187,7 +187,7 @@ export default function DashboardAppPage() {
           localStorage.removeItem('loggedUser')
           navigate('/login')
         })
-    }
+    // }
     // getAllTutees()
     //   .then(data => setTutees(data))
     //   .catch((err) => navigate('/login'))
@@ -388,9 +388,9 @@ export default function DashboardAppPage() {
                           <Button variant="outlined" onClick={() => handleViewMore(id)}>
                             More
                           </Button>
-                          <IconButton size="large" color="inherit" onClick={handleOpenMenu}>
+                          {/* <IconButton size="large" color="inherit" onClick={handleOpenMenu}>
                             <Iconify icon={'eva:more-vertical-fill'} />
-                          </IconButton>
+                          </IconButton> */}
                         </TableCell>
                       </TableRow>
                     );

@@ -20,3 +20,8 @@ export const createTutor = async (tutor) => {
     const res = await axios.post(baseUrl, tutor)
     return res.data
 }
+
+export const updateTutor = async ({ tutorId, newTutor }) => {
+    const res = await axios.put(`${baseUrl}/${tutorId}`, newTutor)
+    return res.data
+}

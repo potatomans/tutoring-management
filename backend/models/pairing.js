@@ -43,6 +43,9 @@ Pairing.init({
     },
     location: {
         type: DataTypes.TEXT
+    },
+    subjectName: {
+        type: DataTypes.TEXT
     }
 }, {
     sequelize,

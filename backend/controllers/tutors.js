@@ -24,10 +24,34 @@ router.get('/:id', tokenExtractor, async (req, res) => {
 
 // create tutor
 router.post('/', async (req, res) => {
-    try{
+    // req.body keys: name and endDate
+    try {
         const tutor = await Tutor.create(req.body)
         res.status(201).json(tutor)
     } catch (error) {
+        console.log(error)
+    }
+})
+
+router.put('/:id', async (req, res) => {
+    try {
+        // req.body keys: name, number and endDate
+        const newTutor = req.body
+        const oldTutor = await Tutor.findByPk(req.params.id)
+        if (oldTutor) {
+            const props = Object.keys(req.body)
+            props.forEach((prop) => {
+                if (!Object.keys(oldTutor.dataValues).includes(prop)) {
+                    throw new Error(`Pairing does not contain property ${prop}.`)
+                }
+                oldTutor[prop] = newTutor[prop]
+            })
+            await oldTutor.save()
+            res.json(oldTutor)
+        } else {
+            res.status(404).end()
+        }
+    } catch (err) {
         console.log(error)
     }
 })

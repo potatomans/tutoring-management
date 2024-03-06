@@ -126,15 +126,23 @@ router.post('/', async (req, res) => {
 })
 
 router.put('/:id', tokenExtractor, async (req, res) => {  
-    const pairing = await Pairing.findByPk(req.params.id)
-    if (pairing) {
-        pairing.userId = req.body.userId
-        await pairing.save()
-        res.json(pairing)
+    const newPairing = req.body
+    const oldPairing = await Pairing.findByPk(req.params.id)
+    // newPairing keys: userId, tuteeId, tutorId, strengths, weaknesses, goals, location, level, subjectName
+    if (oldPairing) {
+        const props = Object.keys(req.body)
+        props.forEach((prop) => {
+            if (!Object.keys(oldPairing.dataValues).includes(prop)) {
+                throw new Error(`Pairing does not contain property ${prop}.`)
+            }
+            oldPairing[prop] = newPairing[prop]
+        })
+        await oldPairing.save()
+        res.json(oldPairing)
     } else {
         res.status(404).end()
     }
-})
+})  
 
 router.delete('/:id', tokenExtractor, async (req, res) => {
     const pairing = await Pairing.findByPk(req.params.id)
