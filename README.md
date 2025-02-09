@@ -11,7 +11,7 @@ On logging in, volunteer managers can view the list of tutor-tutee pairings, inc
 
 ![Dashboard](images/dashboard.jpg)
 
-## Tutor info
+## Tutee info
 The user can also view more information on the tutee, such as their perceived strengths and weaknesses. This helps volunteer managers better understand the beneficiaries they serve.
 
 ![Info](images/info.jpg)
