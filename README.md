@@ -1,5 +1,5 @@
 # About Tutoring Management System
-The TMS is an open-source software that enables volunteer managers to visualize their active tutors. It is live at [https://eduhopesg.onrender.com](https://eduhopesg.onrender.com).
+The TMS is an open-source software that enables volunteer managers to visualize their active tutors.
 
 ## Homepage
 The homepage requires the volunteer manager to log in before viewing the list of active tutors.
